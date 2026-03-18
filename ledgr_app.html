@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledgr — Power Leasing Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+  --navy:#12111f;
+  --navy-mid:#1c1b2e;
+  --navy-light:#252440;
+  --green:#78d649;
+  --green-dim:#4a9e20;
+  --green-bg:#edf8e4;
+  --green-text:#2a6b08;
+  --surface:#f7f6f3;
+  --surface2:#eeece7;
+  --white:#ffffff;
+  --border:rgba(18,17,31,0.10);
+  --border2:rgba(18,17,31,0.18);
+  --text:#12111f;
+  --text2:#4a4963;
+  --text3:#9897b0;
+  --amber:#7a5c00;
+  --amber-bg:#fef3d0;
+  --red:#8b1c1c;
+  --red-bg:#fdeaea;
+  --blue:#1a4fa0;
+  --blue-bg:#e8f0ff;
+  --radius:10px;
+  --sidebar:232px;
+}
+html,body{height:100%;font-family:var(--font);background:var(--surface);color:var(--text);font-size:14px}
+#app{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:var(--sidebar);background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-logo{padding:22px 18px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sb-logo img{width:36px;height:36px;object-fit:cover;border-radius:6px}
+.sb-logo-text .brand{font-size:18px;font-weight:500;color:#fff;letter-spacing:0.02em}
+.sb-logo-text .tagline{font-size:10px;color:rgba(255,255,255,0.35);font-family:var(--mono);letter-spacing:0.06em;margin-top:1px}
+.sb-section{padding:18px 14px 6px;font-size:10px;font-weight:500;color:rgba(255,255,255,0.28);letter-spacing:0.12em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:1px 6px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,0.55);font-size:13px;transition:all 0.15s;user-select:none;position:relative}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.85)}
+.nav-item.active{background:rgba(120,214,73,0.14);color:var(--green)}
+.nav-item.active svg{opacity:1}
+.nav-item svg{width:15px;height:15px;opacity:0.55;flex-shrink:0;transition:opacity 0.15s}
+.nav-item:hover svg,.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;background:var(--green);color:var(--navy);font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;font-family:var(--mono)}
+.sb-bottom{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,0.07)}
+.user-pill{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--green-dim),var(--green));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--navy);flex-shrink:0}
+.user-name{font-size:12px;color:#fff;font-weight:500}
+.user-sub{font-size:11px;color:rgba(255,255,255,0.38);margin-top:1px}
+.role-pill{display:inline-flex;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:var(--mono)}
+.rp-admin{background:rgba(120,214,73,0.18);color:var(--green)}
+.rp-manager{background:rgba(100,140,255,0.18);color:#90b0ff}
+.rp-rep{background:rgba(255,200,80,0.18);color:#ffc850}
+.view-toggle{display:flex;gap:4px}
+.view-toggle button{flex:1;padding:5px;font-size:11px;border:none;border-radius:6px;cursor:pointer;font-family:var(--font);font-weight:500;transition:all 0.15s}
+.vt-off{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45)}
+.vt-off:hover{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+.vt-on{background:var(--green);color:var(--navy)}
+
+/* ── MAIN ── */
+#main{flex:1;overflow-y:auto;min-width:0;display:flex;flex-direction:column}
+.page-header{padding:28px 32px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-shrink:0}
+.ph-left .pg-title{font-size:21px;font-weight:500;color:var(--text)}
+.ph-left .pg-sub{font-size:13px;color:var(--text3);margin-top:3px}
+.ph-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.page-content{padding:0 32px 32px;flex:1}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.stat-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);opacity:0.4}
+.stat-label{font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:400;letter-spacing:0.02em}
+.stat-value{font-size:24px;font-weight:500;color:var(--text);font-family:var(--mono)}
+.stat-sub{font-size:11px;color:var(--green-text);margin-top:5px;font-weight:500}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card+.card{margin-top:14px}
+.card-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:0.5px solid var(--border)}
+.card-title{font-size:13px;font-weight:500;color:var(--text)}
+.card-body{padding:18px}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+th{text-align:left;font-size:10px;font-weight:500;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;padding:9px 14px;border-bottom:0.5px solid var(--border);white-space:nowrap;background:var(--surface)}
+td{padding:11px 14px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fafaf8}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;font-family:var(--mono);white-space:nowrap}
+.b-green{background:var(--green-bg);color:var(--green-text)}
+.b-amber{background:var(--amber-bg);color:var(--amber)}
+.b-red{background:var(--red-bg);color:var(--red)}
+.b-blue{background:var(--blue-bg);color:var(--blue)}
+.b-gray{background:var(--surface2);color:var(--text2)}
+.b-navy{background:rgba(18,17,31,0.07);color:var(--text)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;font-family:var(--font);white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-light)}
+.btn-green{background:var(--green);color:var(--navy)}
+.btn-green:hover{opacity:0.88}
+.btn-ghost{background:transparent;color:var(--text2);border:0.5px solid var(--border2)}
+.btn-ghost:hover{background:var(--surface2)}
+.btn-danger{background:#fff;color:var(--red);border:0.5px solid #f5c0c0}
+.btn-danger:hover{background:var(--red-bg)}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:5px}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 11px;border:0.5px solid var(--border2);border-radius:7px;font-size:13px;font-family:var(--font);color:var(--text);background:#fff;outline:none;transition:border-color 0.15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green-dim);box-shadow:0 0 0 3px rgba(120,214,73,0.12)}
+.form-textarea{resize:vertical;min-height:60px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.form-note{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,9,20,0.55);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
+.modal{background:#fff;border-radius:14px;width:580px;max-width:96vw;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:0 24px 64px rgba(0,0,0,0.18)}
+.modal-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:20px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border)}
+.modal-footer-left{margin-right:auto}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:18px}
+.tab{padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:all 0.15s;user-select:none}
+.tab.active{color:var(--text);border-bottom-color:var(--green);font-weight:500}
+.tab:hover:not(.active){color:var(--text2)}
+
+/* ── MISC ── */
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search-box{position:relative;display:inline-flex;align-items:center}
+.search-box svg{position:absolute;left:9px;color:var(--text3);pointer-events:none;width:13px;height:13px}
+.search-input{padding:7px 11px 7px 30px;border:0.5px solid var(--border2);border-radius:7px;font-size:13px;font-family:var(--font);width:210px;outline:none;background:#fff;transition:border-color 0.15s}
+.search-input:focus{border-color:var(--green-dim)}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:var(--surface2);border-radius:20px;font-size:12px;color:var(--text2);font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:1px;flex-shrink:0}
+.dot-g{background:var(--green-dim)}
+.dot-a{background:#d69e2e}
+.dot-r{background:#c53030}
+.notice{background:var(--amber-bg);border:0.5px solid #f6e080;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.divider-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;padding:14px 0 8px;border-bottom:0.5px solid var(--border);margin-bottom:12px}
+.empty{text-align:center;padding:40px 24px;color:var(--text3);font-size:13px}
+.empty-icon{font-size:28px;margin-bottom:8px;opacity:0.35}
+.actions{display:flex;gap:5px;align-items:center}
+.db-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:4px 10px;border-radius:20px;font-family:var(--mono)}
+.db-live{background:var(--green-bg);color:var(--green-text)}
+.db-demo{background:var(--amber-bg);color:var(--amber)}
+.db-connecting{background:var(--blue-bg);color:var(--blue)}
+.section-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px}
+
+/* ── DATE RANGE ── */
+.date-range{display:flex;align-items:center;gap:8px}
+.date-range input{padding:6px 10px;border:0.5px solid var(--border2);border-radius:7px;font-size:12px;font-family:var(--font);outline:none;background:#fff;color:var(--text)}
+.date-range input:focus{border-color:var(--green-dim)}
+.dr-sep{font-size:12px;color:var(--text3)}
+.quick-dates{display:flex;gap:4px}
+.qd{padding:5px 9px;border-radius:6px;font-size:11px;cursor:pointer;border:0.5px solid var(--border2);background:#fff;color:var(--text2);font-family:var(--font);transition:all 0.15s}
+.qd:hover,.qd.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ── DB SETUP SCREEN ── */
+.setup-card{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:32px;max-width:600px;margin:0 auto}
+.setup-step{display:flex;gap:14px;margin-bottom:20px;padding-bottom:20px;border-bottom:0.5px solid var(--border)}
+.setup-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body .step-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.step-body .step-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.step-body code{background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--text)}
+pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14px 16px;font-size:11px;font-family:var(--mono);overflow-x:auto;margin:10px 0;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .form-row-3{grid-template-columns:1fr 1fr}
+  .page-header{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-logo">
+    <img src="data:image/jpeg;base64,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 cpfEUl4KPmfePWI8IKNcLLzisP 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" alt="Ledgr">
+    <div class="sb-logo-text">
+      <div class="brand">Ledgr</div>
+      <div class="tagline">Power Leasing Portal</div>
+    </div>
+  </div>
+
+  <div class="sb-section">Overview</div>
+  <div class="nav-item active" onclick="nav('dashboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    Dashboard
+  </div>
+
+  <div class="sb-section">Leasing</div>
+  <div class="nav-item" onclick="nav('leases')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Leases
+    <span class="nav-badge" id="pending-badge">0</span>
+  </div>
+  <div class="nav-item" onclick="nav('properties')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Properties
+  </div>
+
+  <div class="sb-section" id="sb-admin">Admin</div>
+  <div class="nav-item" id="nav-reps" onclick="nav('reps')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+    Reps &amp; Users
+  </div>
+  <div class="nav-item" id="nav-comm-rules" onclick="nav('comm-rules')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Commission Rules
+  </div>
+  <div class="nav-item" id="nav-invoices" onclick="nav('invoices')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    Invoices
+  </div>
+  <div class="nav-item" id="nav-reports" onclick="nav('reports')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Reports
+  </div>
+  <div class="nav-item" id="nav-setup" onclick="nav('setup')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Database Setup
+  </div>
+
+  <div class="sb-bottom">
+    <div class="user-pill">
+      <div class="user-av" id="u-av">AU</div>
+      <div>
+        <div class="user-name" id="u-name">Admin</div>
+        <div><span class="role-pill rp-admin" id="u-role">admin</span></div>
+      </div>
+    </div>
+    <div class="view-toggle">
+      <button class="vt-on" onclick="setRole('admin')">Admin</button>
+      <button class="vt-off" onclick="setRole('manager')">Manager</button>
+      <button class="vt-off" onclick="setRole('rep')">Rep</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- DASHBOARD -->
+  <div id="pg-dashboard" class="pg">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Dashboard</div><div class="pg-sub">Power Leasing overview</div></div>
+      <div class="ph-right">
+        <span class="db-status db-demo" id="db-status-dash">
+          <span class="dot dot-a"></span> Demo data
+        </span>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="stat-grid" id="stat-grid"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent leases</span><button class="btn btn-ghost btn-sm" onclick="nav('leases')">View all</button></div>
+          <div id="dash-recent"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Pending commissions</span><button class="btn btn-ghost btn-sm" onclick="nav('comm-rules')">Manage</button></div>
+          <div id="dash-pending-comm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEASES -->
+  <div id="pg-leases" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Leases</div><div class="pg-sub" id="leases-sub">All lease transactions</div></div>
+      <div class="ph-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="search-input" placeholder="Search applicant or unit..." oninput="filterLeases()" id="lease-search">
+        </div>
+        <select class="form-select" style="width:auto" onchange="filterLeases()" id="lease-status-filter">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="moved_in">Moved in</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select class="form-select" style="width:auto" onchange="filterLeases()" id="lease-prop-filter">
+          <option value="">All properties</option>
+        </select>
+        <button class="btn btn-green" onclick="openLeaseModal()">+ New lease</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="notice" id="lease-notice" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="lease-notice-text"></span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="chip" id="lease-count">0 leases</span>
+          <span id="db-status-leases" class="db-status db-demo"><span class="dot dot-a"></span> Demo data</span>
+        </div>
+        <div class="tbl-wrap" id="leases-tbl"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPERTIES -->
+  <div id="pg-properties" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Properties</div><div class="pg-sub">Client properties and invoicing setup</div></div>
+      <div class="ph-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="search-input" placeholder="Search properties..." oninput="filterProperties()" id="prop-search">
+        </div>
+        <button class="btn btn-green" id="add-prop-btn" onclick="openPropertyModal()">+ Add property</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card"><div class="tbl-wrap" id="props-tbl"></div></div>
+    </div>
+  </div>
+
+  <!-- REPS -->
+  <div id="pg-reps" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Reps &amp; Users</div><div class="pg-sub">Team members, roles and commission defaults</div></div>
+      <div class="ph-right"><button class="btn btn-green" onclick="openRepModal()">+ Add rep</button></div>
+    </div>
+    <div class="page-content">
+      <div class="card"><div class="tbl-wrap" id="reps-tbl"></div></div>
+    </div>
+  </div>
+
+  <!-- COMMISSION RULES -->
+  <div id="pg-comm-rules" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Commission rules</div><div class="pg-sub">Default rules per rep with property-level overrides</div></div>
+    </div>
+    <div class="page-content">
+      <div class="tabs">
+        <div class="tab active" onclick="commTab('ledger',this)">Commission ledger</div>
+        <div class="tab" onclick="commTab('rules',this)">Rules &amp; overrides</div>
+      </div>
+      <div id="comm-ledger-view">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All commission entries</span>
+            <select class="form-select" style="width:auto" onchange="filterCommLedger(this.value)" id="comm-rep-filter">
+              <option value="">All reps</option>
+            </select>
+          </div>
+          <div class="tbl-wrap" id="comm-ledger-tbl"></div>
+        </div>
+      </div>
+      <div id="comm-rules-view" style="display:none">
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-header"><span class="card-title">Default rules by rep</span></div>
+          <div class="tbl-wrap" id="comm-defaults-tbl"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Property overrides</span><button class="btn btn-green btn-sm" onclick="openOverrideModal()">+ Add override</button></div>
+          <div class="tbl-wrap" id="comm-overrides-tbl"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVOICES -->
+  <div id="pg-invoices" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Invoices</div><div class="pg-sub">Client billing ledger</div></div>
+      <div class="ph-right">
+        <select class="form-select" style="width:auto" onchange="filterInvoices()" id="inv-prop-filter">
+          <option value="">All properties</option>
+        </select>
+        <select class="form-select" style="width:auto" onchange="filterInvoices()" id="inv-status-filter">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="invoiced">Invoiced</option>
+        </select>
+        <button class="btn btn-ghost" onclick="exportCSV('invoices')">Export CSV</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Invoice ledger</span><span class="chip" id="inv-total"></span></div>
+        <div class="tbl-wrap" id="inv-tbl"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div id="pg-reports" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Reports</div><div class="pg-sub">Filterable period summaries for invoicing and payroll</div></div>
+    </div>
+    <div class="page-content">
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-body">
+          <div class="section-title">Date range filter</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div class="date-range">
+              <input type="date" id="rpt-from" onchange="renderReports()">
+              <span class="dr-sep">to</span>
+              <input type="date" id="rpt-to" onchange="renderReports()">
+            </div>
+            <div class="quick-dates">
+              <button class="qd" onclick="setDateRange('this-month',this)">This month</button>
+              <button class="qd" onclick="setDateRange('last-month',this)">Last month</button>
+              <button class="qd" onclick="setDateRange('this-quarter',this)">This quarter</button>
+              <button class="qd" onclick="setDateRange('all',this)">All time</button>
+            </div>
+            <select class="form-select" style="width:auto" id="rpt-rep-filter" onchange="renderReports()">
+              <option value="">All reps</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="exportCSV('report')">Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Invoice summary</span><span class="chip" id="rpt-inv-total"></span></div>
+          <div class="tbl-wrap" id="rpt-inv-tbl"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Commission payroll summary</span><span class="chip" id="rpt-comm-total"></span></div>
+          <div class="tbl-wrap" id="rpt-comm-tbl"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><span class="card-title">Lease pipeline</span></div>
+        <div class="tbl-wrap" id="rpt-pipeline-tbl"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Exceptions &amp; cancellations</span></div>
+        <div class="tbl-wrap" id="rpt-exceptions-tbl"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATABASE SETUP -->
+  <div id="pg-setup" class="pg" style="display:none">
+    <div class="page-header">
+      <div class="ph-left"><div class="pg-title">Database setup</div><div class="pg-sub">Connect Ledgr to your Google Sheet as the live database</div></div>
+      <div class="ph-right">
+        <span class="db-status" id="setup-db-status"><span class="dot dot-a"></span> Not connected</span>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="notice" style="margin-bottom:20px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        The app is running on demo data. Follow these steps to connect it to your live Google Sheet. This takes about 10 minutes and only needs to be done once.
+      </div>
+
+      <div class="setup-card">
+        <div class="setup-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Open your Google Sheet</div>
+            <div class="step-desc">Open the Ledgr Google Sheet you created. In the menu bar, click <code>Extensions</code> then <code>Apps Script</code>. This opens the script editor in a new tab.</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Paste the backend script</div>
+            <div class="step-desc">Delete any existing code in the editor, then paste the entire script below. This creates a simple API that Ledgr uses to read and write data.</div>
+            <pre class="code-block" id="apps-script-code">// Ledgr Backend - Google Apps Script
+// Paste this entire script into Apps Script, then click Deploy
+
+const SHEET_ID = 'YOUR_SHEET_ID_HERE'; // Replace with your Sheet ID
+const TABS = ['Properties','Reps','Leases','Overrides','CommLedger','InvLedger'];
+
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  const action = e.parameter.action;
+  const tab = e.parameter.tab;
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+
+  try {
+    if (action === 'init') return initSheets(ss);
+    if (action === 'read') return readTab(ss, tab);
+    if (action === 'write') return writeRow(ss, tab, JSON.parse(e.parameter.data));
+    if (action === 'update') return updateRow(ss, tab, e.parameter.id, JSON.parse(e.parameter.data));
+    if (action === 'delete') return deleteRow(ss, tab, e.parameter.id);
+    return resp({error: 'Unknown action'});
+  } catch(err) {
+    return resp({error: err.toString()});
+  }
+}
+
+function initSheets(ss) {
+  const headers = {
+    Properties: ['id','name','client','invoicingEmail','invoiceRate','renewalRate','weeklyFee','weeklyFeeType','repId','contractStart','contractEnd','invoiceType','address','status','notes'],
+    Reps: ['id','name','email','commPct','advanceAmt','minCommission','baseSalary','empType','role','status','initials'],
+    Leases: ['id','propertyId','repId','applicant','apt','rent','promo','promoType','promoValue','leaseTerm','effectiveTerm','miDate','status','invoiced','advancePaid','advancePaidDate','commBalPaid','commBalPaidDate','invoiceNum','invoiceAmt','splitRepId','splitPct','clawback','notes','dateLeased'],
+    Overrides: ['id','repId','propertyId','commPct','advanceAmt','minCommission'],
+    CommLedger: ['id','leaseId','repId','type','amount','date','note'],
+    InvLedger: ['id','leaseId','propertyId','type','amount','date','invoiceNum','status','note']
+  };
+  TABS.forEach(t => {
+    let sheet = ss.getSheetByName(t);
+    if (!sheet) {
+      sheet = ss.insertSheet(t);
+      sheet.getRange(1, 1, 1, headers[t].length).setValues([headers[t]]);
+      sheet.getRange(1, 1, 1, headers[t].length).setFontWeight('bold').setBackground('#12111f').setFontColor('#78d649');
+    }
+  });
+  return resp({ok: true, message: 'Sheets initialized'});
+}
+
+function readTab(ss, tab) {
+  const sheet = ss.getSheetByName(tab);
+  if (!sheet) return resp({error: 'Tab not found: ' + tab});
+  const data = sheet.getDataRange().getValues();
+  if (data.length < 2) return resp({rows: []});
+  const headers = data[0];
+  const rows = data.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = row[i]);
+    return obj;
+  }).filter(r => r.id);
+  return resp({rows});
+}
+
+function writeRow(ss, tab, data) {
+  const sheet = ss.getSheetByName(tab);
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const row = headers.map(h => data[h] !== undefined ? data[h] : '');
+  sheet.appendRow(row);
+  return resp({ok: true});
+}
+
+function updateRow(ss, tab, id, data) {
+  const sheet = ss.getSheetByName(tab);
+  const allData = sheet.getDataRange().getValues();
+  const headers = allData[0];
+  const idIdx = headers.indexOf('id');
+  for (let i = 1; i < allData.length; i++) {
+    if (String(allData[i][idIdx]) === String(id)) {
+      const row = headers.map((h, j) => data[h] !== undefined ? data[h] : allData[i][j]);
+      sheet.getRange(i + 1, 1, 1, row.length).setValues([row]);
+      return resp({ok: true});
+    }
+  }
+  return resp({error: 'Row not found'});
+}
+
+function deleteRow(ss, tab, id) {
+  const sheet = ss.getSheetByName(tab);
+  const allData = sheet.getDataRange().getValues();
+  const idIdx = allData[0].indexOf('id');
+  for (let i = 1; i < allData.length; i++) {
+    if (String(allData[i][idIdx]) === String(id)) {
+      sheet.deleteRow(i + 1);
+      return resp({ok: true});
+    }
+  }
+  return resp({error: 'Row not found'});
+}
+
+function resp(data) {
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Update your Sheet ID in the script</div>
+            <div class="step-desc">On line 3 of the script, replace <code>YOUR_SHEET_ID_HERE</code> with your actual Sheet ID. Your Sheet ID is in the URL: <code>docs.google.com/spreadsheets/d/<strong>THIS_PART</strong>/edit</code><br><br>Your Sheet ID is: <code style="color:var(--green-text);font-weight:500">1nmbUEVP1FK_corfnnahQRCpyI2HXiXQ1b7sOdinz3qQ</code></div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Deploy the script</div>
+            <div class="step-desc">Click <code>Deploy</code> (top right) then <code>New deployment</code>. Set type to <code>Web app</code>. Set "Execute as" to <code>Me</code> and "Who has access" to <code>Anyone</code>. Click <code>Deploy</code>, authorize when prompted, then copy the Web App URL.</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Connect Ledgr to your database</div>
+            <div class="step-desc">Paste your Web App URL below and click Connect. Ledgr will initialize the sheet structure and switch from demo data to live data.</div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <input class="form-input" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1">
+              <button class="btn btn-green" onclick="connectDB()">Connect</button>
+            </div>
+            <div id="connect-result" style="margin-top:8px;font-size:12px;color:var(--text3)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)" style="display:none">
+  <div class="modal" id="modal-box" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const SHEET_ID = '1nmbUEVP1FK_corfnnahQRCpyI2HXiXQ1b7sOdinz3qQ';
+let API_URL = localStorage.getItem('ledgr_api_url') || '';
+let DB_LIVE = false;
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let currentRole = 'admin';
+let currentRepId = 'r2'; // for rep view demo
+let activePage = 'dashboard';
+let commActiveTab = 'ledger';
+
+// ── DEMO DATA ─────────────────────────────────────────────────────────────────
+let DB = {
+  properties: [
+    {id:'p1',name:'Gainsborough Court',client:'AJ Dwoskin',invoicingEmail:'vendor@ajdwoskin.com',invoiceRate:0.11,renewalRate:0.04,weeklyFee:700,weeklyFeeType:'weekly',repId:'r3',contractStart:'2025-05-19',contractEnd:'2025-07-31',invoiceType:'percent',address:'DC',status:'active',notes:''},
+    {id:'p2',name:'Avantus',client:'Greystar',invoicingEmail:'avantusmgr@greystar.com',invoiceRate:0.11,renewalRate:0.04,weeklyFee:700,weeklyFeeType:'weekly',repId:'r7',contractStart:'2025-05-28',contractEnd:'',invoiceType:'percent',address:'',status:'active',notes:'33/perdiem to Sky'},
+    {id:'p3',name:'Solstice',client:'MEB Mgmt',invoicingEmail:'solstice.manager@mebmgmt.com',invoiceRate:0.07,renewalRate:0,weeklyFee:700,weeklyFeeType:'weekly',repId:'r1',contractStart:'2024-04-23',contractEnd:'2024-12-19',invoiceType:'percent',address:'Tucson AZ',status:'active',notes:'paused 5/31-9/20'},
+    {id:'p4',name:'Alexan Pena Station',client:'Avenue5',invoicingEmail:'pm.alexanpenastation@avenue5apt.com',invoiceRate:0.085,renewalRate:0,weeklyFee:700,weeklyFeeType:'weekly',repId:'r2',contractStart:'2025-07-01',contractEnd:'',invoiceType:'percent',address:'',status:'active',notes:''},
+    {id:'p5',name:'University Lofts',client:'Doorkeeper',invoicingEmail:'grice@doorkeeperproperties.com',invoiceRate:0.11,renewalRate:0,weeklyFee:700,weeklyFeeType:'weekly',repId:'r6',contractStart:'2025-06-18',contractEnd:'',invoiceType:'percent',address:'',status:'active',notes:''},
+    {id:'p6',name:'Contour Boulder',client:'Bryten',invoicingEmail:'allison.strickler@livebryten.com',invoiceRate:0.085,renewalRate:0,weeklyFee:700,weeklyFeeType:'weekly',repId:'r4',contractStart:'2025-07-14',contractEnd:'',invoiceType:'percent',address:'',status:'active',notes:''},
+    {id:'p7',name:'Poplar Place',client:'Prismai',invoicingEmail:'cgomez@prismai.com',invoiceRate:0.09,renewalRate:0,weeklyFee:140,weeklyFeeType:'daily',repId:'r5',contractStart:'2024-06-04',contractEnd:'',invoiceType:'percent',address:'Longmont CO',status:'active',notes:''},
+    {id:'p8',name:'Lexington Ranch',client:'ZRS Mgmt',invoicingEmail:'cmusgraves@zrsmanagement.com',invoiceRate:0.085,renewalRate:0,weeklyFee:700,weeklyFeeType:'weekly',repId:'r3',contractStart:'2025-08-04',contractEnd:'',invoiceType:'percent',address:'Frisco TX',status:'active',notes:''},
+  ],
+  reps: [
+    {id:'r1',name:'Becca',email:'becca@powerleasinginc.com',commPct:0.035,advanceAmt:50,minCommission:0,baseSalary:35000,empType:'FT',role:'rep',status:'active',initials:'BE'},
+    {id:'r2',name:'Amanda',email:'amanda@powerleasing.com',commPct:0.025,advanceAmt:100,minCommission:0,baseSalary:45000,empType:'FT',role:'rep',status:'active',initials:'AM'},
+    {id:'r3',name:'Devansu',email:'devansu@powerleasinginc.com',commPct:0.005,advanceAmt:50,minCommission:0,baseSalary:40000,empType:'FT',role:'rep',status:'active',initials:'DE'},
+    {id:'r4',name:'Kaylah',email:'kaylah@powerleasinginc.com',commPct:0.015,advanceAmt:100,minCommission:0,baseSalary:35000,empType:'FT',role:'rep',status:'active',initials:'KA'},
+    {id:'r5',name:'April',email:'april@powerleasinginc.com',commPct:0.14,advanceAmt:0,minCommission:0,baseSalary:100000,empType:'Mgmt',role:'manager',status:'active',initials:'AP'},
+    {id:'r6',name:'Reed',email:'reed@powerleasinginc.com',commPct:0.013,advanceAmt:100,minCommission:0,baseSalary:32000,empType:'FT',role:'rep',status:'active',initials:'RE'},
+    {id:'r7',name:'Sky',email:'jocey@powerleasinginc.com',commPct:0.005,advanceAmt:0,minCommission:0,baseSalary:40000,empType:'FT',role:'rep',status:'active',initials:'SK'},
+    {id:'r8',name:"Na'Kesha",email:'nakesha@powerleasinginc.com',commPct:0.015,advanceAmt:100,minCommission:0,baseSalary:35000,empType:'FT',role:'rep',status:'active',initials:'NK'},
+    {id:'r9',name:'Kelsey',email:'kelsey@powerleasinginc.com',commPct:0.02,advanceAmt:0,minCommission:0,baseSalary:0,empType:'Contractor',role:'rep',status:'active',initials:'KE'},
+    {id:'r10',name:'Rachel',email:'rachel@powerleasinginc.com',commPct:0.015,advanceAmt:100,minCommission:0,baseSalary:35000,empType:'FT',role:'rep',status:'active',initials:'RA'},
+  ],
+  leases: [
+    {id:'l1',propertyId:'p1',repId:'r3',applicant:'Nathaniel Foster',apt:'2025',rent:2090,promo:'1/2 off first month',promoType:'term_reducing',promoValue:0.5,leaseTerm:16,effectiveTerm:15.5,miDate:'2025-06-18',status:'moved_in',invoiced:true,advancePaid:50,advancePaidDate:'2025-06-15',commBalPaid:111.98,commBalPaidDate:'2025-06-30',invoiceNum:'5363',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-06-07'},
+    {id:'l2',propertyId:'p1',repId:'r3',applicant:'Brenda Reagan',apt:'736-c',rent:2430,promo:'',promoType:'none',promoValue:0,leaseTerm:16,effectiveTerm:16,miDate:'2025-07-01',status:'moved_in',invoiced:true,advancePaid:0,advancePaidDate:'',commBalPaid:194.4,commBalPaidDate:'2025-07-15',invoiceNum:'5389',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-06-26'},
+    {id:'l3',propertyId:'p2',repId:'r7',applicant:'Josue & Jonathan',apt:'111',rent:1426,promo:'3 months free',promoType:'term_reducing',promoValue:3,leaseTerm:12,effectiveTerm:9,miDate:'2025-06-09',status:'moved_in',invoiced:true,advancePaid:0,advancePaidDate:'',commBalPaid:64.17,commBalPaidDate:'2025-06-15',invoiceNum:'5351',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-06-03'},
+    {id:'l4',propertyId:'p4',repId:'r2',applicant:'Alexandra King',apt:'2306',rent:1910,promo:'10 weeks free',promoType:'term_reducing',promoValue:2.5,leaseTerm:18,effectiveTerm:15.5,miDate:'2025-07-17',status:'moved_in',invoiced:true,advancePaid:100,advancePaidDate:'2025-07-15',commBalPaid:640.13,commBalPaidDate:'2025-07-31',invoiceNum:'',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-07-15'},
+    {id:'l5',propertyId:'p4',repId:'r2',applicant:'Hamid Baweemu',apt:'1216',rent:1780,promo:'10 weeks free',promoType:'term_reducing',promoValue:2.5,leaseTerm:18,effectiveTerm:15.5,miDate:'2025-09-06',status:'approved',invoiced:false,advancePaid:100,advancePaidDate:'2025-07-15',commBalPaid:0,commBalPaidDate:'',invoiceNum:'',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-07-12'},
+    {id:'l6',propertyId:'p3',repId:'r1',applicant:'Ramya Ram',apt:'3103',rent:1625,promo:'',promoType:'none',promoValue:0,leaseTerm:12,effectiveTerm:12,miDate:'2024-10-18',status:'moved_in',invoiced:true,advancePaid:50,advancePaidDate:'2024-10-15',commBalPaid:47.5,commBalPaidDate:'2024-10-31',invoiceNum:'5099',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2024-09-21'},
+    {id:'l7',propertyId:'p1',repId:'r3',applicant:'Kumudini Nerella',apt:'11120',rent:3370,promo:'',promoType:'none',promoValue:0,leaseTerm:12,effectiveTerm:12,miDate:'2025-07-28',status:'cancelled',invoiced:false,advancePaid:50,advancePaidDate:'2025-06-30',commBalPaid:0,commBalPaidDate:'',invoiceNum:'',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'No longer on sheet',dateLeased:'2025-06-10'},
+    {id:'l8',propertyId:'p5',repId:'r6',applicant:'Future Tenant A',apt:'201',rent:1850,promo:'',promoType:'none',promoValue:0,leaseTerm:12,effectiveTerm:12,miDate:'',status:'pending',invoiced:false,advancePaid:0,advancePaidDate:'',commBalPaid:0,commBalPaidDate:'',invoiceNum:'',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'Awaiting approval',dateLeased:'2025-08-01'},
+    {id:'l9',propertyId:'p4',repId:'r2',applicant:'Jared Benefield',apt:'2305',rent:2375,promo:'10 weeks free',promoType:'term_reducing',promoValue:2.5,leaseTerm:18,effectiveTerm:15.5,miDate:'2025-07-18',status:'moved_in',invoiced:true,advancePaid:0,advancePaidDate:'',commBalPaid:920.31,commBalPaidDate:'2025-07-31',invoiceNum:'',invoiceAmt:0,splitRepId:'',splitPct:0,clawback:false,notes:'',dateLeased:'2025-07-16'},
+  ],
+  overrides: []
+};
+
+// ── COMMISSION ENGINE ─────────────────────────────────────────────────────────
+function calcInvoice(lease) {
+  const prop = DB.properties.find(p=>p.id===lease.propertyId);
+  if (!prop) return 0;
+  return parseFloat((lease.rent * lease.effectiveTerm * prop.invoiceRate).toFixed(2));
+}
+
+function calcComm(lease) {
+  const prop = DB.properties.find(p=>p.id===lease.propertyId);
+  const rep = DB.reps.find(r=>r.id===lease.repId);
+  if (!prop || !rep) return {advance:0,balance:0,total:0};
+  const ov = DB.overrides.find(o=>o.repId===lease.repId && o.propertyId===lease.propertyId);
+  const pct = ov ? ov.commPct : rep.commPct;
+  const adv = ov ? ov.advanceAmt : rep.advanceAmt;
+  const minC = ov ? (ov.minCommission||0) : (rep.minCommission||0);
+  const inv = calcInvoice(lease);
+  const raw = inv * pct;
+  const total = Math.max(raw, minC);
+  const advance = Math.min(adv, total);
+  const balance = parseFloat((total - advance).toFixed(2));
+  if (lease.splitRepId && lease.splitPct > 0) {
+    const f = 1 - lease.splitPct;
+    return {advance:parseFloat((advance*f).toFixed(2)), balance:parseFloat((balance*f).toFixed(2)), total:parseFloat((total*f).toFixed(2)), split:true};
+  }
+  return {advance:parseFloat(advance.toFixed(2)), balance, total:parseFloat(total.toFixed(2))};
+}
+
+// ── DB LAYER ──────────────────────────────────────────────────────────────────
+async function apiCall(params) {
+  if (!API_URL) return null;
+  try {
+    const url = API_URL + '?' + new URLSearchParams(params).toString();
+    const r = await fetch(url);
+    return await r.json();
+  } catch(e) { return {error: e.toString()}; }
+}
+
+async function dbRead(tab) {
+  if (!DB_LIVE) return DB[tab.toLowerCase()] || [];
+  const r = await apiCall({action:'read', tab});
+  if (r && r.rows) return r.rows;
+  return [];
+}
+
+async function dbWrite(tab, data) {
+  if (!DB_LIVE) {
+    const key = tab.toLowerCase();
+    if (!data.id) data.id = tab[0].toLowerCase() + Date.now();
+    if (!DB[key]) DB[key] = [];
+    DB[key].push(data);
+    return {ok:true};
+  }
+  return await apiCall({action:'write', tab, data:JSON.stringify(data)});
+}
+
+async function dbUpdate(tab, id, data) {
+  if (!DB_LIVE) {
+    const key = tab.toLowerCase();
+    const i = DB[key].findIndex(r=>r.id===id);
+    if (i>=0) Object.assign(DB[key][i], data);
+    return {ok:true};
+  }
+  return await apiCall({action:'update', tab, id, data:JSON.stringify(data)});
+}
+
+async function dbDelete(tab, id) {
+  if (!DB_LIVE) {
+    const key = tab.toLowerCase();
+    DB[key] = DB[key].filter(r=>r.id!==id);
+    return {ok:true};
+  }
+  return await apiCall({action:'delete', tab, id});
+}
+
+async function connectDB() {
+  const url = document.getElementById('api-url-input').value.trim();
+  const el = document.getElementById('connect-result');
+  if (!url) { el.textContent = 'Please paste your Web App URL first.'; return; }
+  el.textContent = 'Connecting...';
+  API_URL = url;
+  const r = await apiCall({action:'init'});
+  if (r && r.ok) {
+    localStorage.setItem('ledgr_api_url', url);
+    DB_LIVE = true;
+    el.style.color = 'var(--green-text)';
+    el.textContent = 'Connected! Sheet structure initialized. Loading live data...';
+    document.getElementById('setup-db-status').innerHTML = '<span class="dot dot-g"></span> Connected';
+    document.getElementById('setup-db-status').className = 'db-status db-live';
+    updateDbStatusBadges();
+    await loadFromDB();
+    nav('dashboard');
+  } else {
+    el.style.color = 'var(--red)';
+    el.textContent = 'Connection failed: ' + (r ? (r.error||'Unknown error') : 'No response. Check your URL and try again.');
+  }
+}
+
+async function loadFromDB() {
+  DB.properties = await dbRead('Properties');
+  DB.reps = await dbRead('Reps');
+  DB.leases = await dbRead('Leases');
+  DB.overrides = await dbRead('Overrides');
+}
+
+function updateDbStatusBadges() {
+  const cls = DB_LIVE ? 'db-live' : 'db-demo';
+  const html = DB_LIVE ? '<span class="dot dot-g"></span> Live' : '<span class="dot dot-a"></span> Demo data';
+  ['db-status-dash','db-status-leases'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.className = 'db-status ' + cls; el.innerHTML = html; }
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function nav(page) {
+  document.querySelectorAll('.pg').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+page).style.display='';
+  const ni = document.querySelector(`.nav-item[onclick="nav('${page}')"]`);
+  if (ni) ni.classList.add('active');
+  activePage = page;
+  const renders = {
+    dashboard: renderDashboard,
+    leases: renderLeases,
+    properties: renderProperties,
+    reps: renderReps,
+    'comm-rules': renderCommRules,
+    invoices: renderInvoices,
+    reports: initReports,
+  };
+  if (renders[page]) renders[page]();
+}
+
+function setRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.view-toggle button').forEach(b=>b.className='vt-off');
+  event.target.className = 'vt-on';
+  const roleMap = {admin:{name:'Admin',initials:'AU',cls:'rp-admin'}, manager:{name:'April (Mgr)',initials:'AP',cls:'rp-manager'}, rep:{name:'Amanda (Rep)',initials:'AM',cls:'rp-rep'}};
+  const r = roleMap[role];
+  document.getElementById('u-av').textContent = r.initials;
+  document.getElementById('u-name').textContent = r.name;
+  document.getElementById('u-role').textContent = role;
+  document.getElementById('u-role').className = 'role-pill ' + r.cls;
+  const adminOnly = ['sb-admin','nav-reps','nav-comm-rules','nav-invoices'];
+  adminOnly.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (role==='admin') ? '' : 'none';
+  });
+  if (role==='rep') nav('leases');
+  else nav('dashboard');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const m = {approved:'b-green approved', moved_in:'b-blue moved in', pending:'b-amber pending', cancelled:'b-red cancelled'};
+  const [cls,label] = (m[s]||'b-gray '+s).split(' ');
+  return `<span class="badge ${cls}">${label||s}</span>`;
+}
+function fmt$(n) { return '$'+(+n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtPct(n) { return ((+n||0)*100).toFixed(2)+'%'; }
+function repName(id) { return DB.reps.find(r=>r.id===id)?.name||'--'; }
+function propName(id) { return DB.properties.find(p=>p.id===id)?.name||'--'; }
+function visibleLeases() {
+  if (currentRole==='rep') return DB.leases.filter(l=>l.repId===currentRepId);
+  if (currentRole==='manager') return DB.leases;
+  return DB.leases;
+}
+
+function updatePendingBadge() {
+  const n = DB.leases.filter(l=>l.status==='pending').length;
+  document.getElementById('pending-badge').textContent = n;
+  document.getElementById('pending-badge').style.display = n>0?'':'none';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  updatePendingBadge();
+  const vl = visibleLeases();
+  const active = vl.filter(l=>l.status!=='cancelled').length;
+  const movedIn = vl.filter(l=>l.status==='moved_in').length;
+  const totalInv = vl.reduce((s,l)=>s+calcInvoice(l),0);
+  const totalComm = vl.reduce((s,l)=>s+(+l.advancePaid||0)+(+l.commBalPaid||0),0);
+  const pendingComm = vl.filter(l=>l.status==='approved'&&!l.commBalPaid).reduce((s,l)=>s+calcComm(l).balance,0);
+
+  document.getElementById('stat-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Active leases</div><div class="stat-value">${active}</div><div class="stat-sub">${vl.filter(l=>l.status==='pending').length} pending approval</div></div>
+    <div class="stat-card"><div class="stat-label">Move-ins</div><div class="stat-value">${movedIn}</div></div>
+    <div class="stat-card"><div class="stat-label">Total invoiced</div><div class="stat-value">${fmt$(totalInv)}</div></div>
+    <div class="stat-card"><div class="stat-label">${currentRole==='rep'?'My commissions':'Commissions paid'}</div><div class="stat-value">${fmt$(totalComm)}</div><div class="stat-sub">${fmt$(pendingComm)} pending</div></div>
+  `;
+
+  const recent = [...vl].sort((a,b)=>(b.dateLeased||'').localeCompare(a.dateLeased||'')).slice(0,6);
+  document.getElementById('dash-recent').innerHTML = recent.length
+    ? `<table><thead><tr><th>Applicant</th><th>Property</th><th>Status</th></tr></thead><tbody>
+       ${recent.map(l=>`<tr><td style="font-weight:500">${l.applicant}</td><td style="color:var(--text2)">${propName(l.propertyId)}</td><td>${statusBadge(l.status)}</td></tr>`).join('')}
+       </tbody></table>`
+    : '<div class="empty">No lease activity</div>';
+
+  const pc = vl.filter(l=>l.status==='approved'&&!l.commBalPaid);
+  document.getElementById('dash-pending-comm').innerHTML = pc.length
+    ? `<table><thead><tr><th>Applicant</th><th>Rep</th><th>Balance due</th></tr></thead><tbody>
+       ${pc.map(l=>`<tr><td>${l.applicant}</td><td style="color:var(--text2)">${currentRole!=='rep'?repName(l.repId):'--'}</td><td style="font-family:var(--mono)">${fmt$(calcComm(l).balance)}</td></tr>`).join('')}
+       </tbody></table>`
+    : '<div class="empty" style="padding:24px">No pending commissions</div>';
+}
+
+// ── LEASES ────────────────────────────────────────────────────────────────────
+function renderLeases() {
+  const propSel = document.getElementById('lease-prop-filter');
+  propSel.innerHTML = '<option value="">All properties</option>' + DB.properties.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+
+  if (currentRole==='rep') {
+    document.getElementById('leases-sub').textContent = 'My lease transactions';
+    document.getElementById('lease-notice').style.display='flex';
+    document.getElementById('lease-notice-text').textContent='Showing your leases only.';
+  } else {
+    document.getElementById('leases-sub').textContent='All lease transactions';
+    document.getElementById('lease-notice').style.display='none';
+  }
+  filterLeases();
+}
+
+function filterLeases() {
+  let leases = visibleLeases();
+  const q = (document.getElementById('lease-search')?.value||'').toLowerCase();
+  const st = document.getElementById('lease-status-filter')?.value||'';
+  const pr = document.getElementById('lease-prop-filter')?.value||'';
+  if (q) leases=leases.filter(l=>l.applicant.toLowerCase().includes(q)||l.apt.toLowerCase().includes(q));
+  if (st) leases=leases.filter(l=>l.status===st);
+  if (pr) leases=leases.filter(l=>l.propertyId===pr);
+  document.getElementById('lease-count').textContent=`${leases.length} lease${leases.length!==1?'s':''}`;
+
+  if (!leases.length) {
+    document.getElementById('leases-tbl').innerHTML='<div class="empty"><div class="empty-icon">📋</div>No leases found</div>';
+    return;
+  }
+  document.getElementById('leases-tbl').innerHTML=`
+    <table><thead><tr>
+      <th>Applicant</th><th>Property</th><th>Unit</th><th>Rent</th><th>Eff. term</th><th>Invoice amt</th>
+      <th>Move-in</th><th>Status</th>${currentRole!=='rep'?'<th>Rep</th>':''}
+      <th>Advance</th><th>Comm balance</th><th>Invoiced</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${leases.map(l=>{
+      const comm=calcComm(l);
+      const inv=calcInvoice(l);
+      const balDue=l.commBalPaid?l.commBalPaid:comm.balance;
+      return `<tr>
+        <td style="font-weight:500;white-space:nowrap">${l.applicant}</td>
+        <td style="color:var(--text2)">${propName(l.propertyId)}</td>
+        <td style="font-family:var(--mono)">${l.apt}</td>
+        <td style="font-family:var(--mono)">${fmt$(l.rent)}</td>
+        <td style="font-family:var(--mono)">${l.effectiveTerm}mo</td>
+        <td style="font-family:var(--mono)">${fmt$(inv)}</td>
+        <td style="color:var(--text2);white-space:nowrap">${l.miDate||'--'}</td>
+        <td>${statusBadge(l.status)}</td>
+        ${currentRole!=='rep'?`<td>${repName(l.repId)}</td>`:''}
+        <td style="font-family:var(--mono)">${fmt$(l.advancePaid||0)} ${l.advancePaidDate?'<span class="dot dot-g"></span>':''}</td>
+        <td style="font-family:var(--mono)">${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':fmt$(balDue)+' '+(l.commBalPaid?'<span class="dot dot-g"></span>':'')}</td>
+        <td>${l.invoiced?'<span class="badge b-green">yes</span>':'<span class="badge b-gray">no</span>'}</td>
+        <td><div class="actions">
+          <button class="btn btn-ghost btn-xs" onclick="openLeaseModal('${l.id}')">Edit</button>
+          ${currentRole==='admin'?`<button class="btn btn-ghost btn-xs" onclick="openStatusModal('${l.id}')">Status</button>`:''}
+        </div></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+// ── PROPERTIES ────────────────────────────────────────────────────────────────
+function renderProperties() {
+  let props = currentRole==='rep' ? DB.properties.filter(p=>p.repId===currentRepId) : DB.properties;
+  const q = (document.getElementById('prop-search')?.value||'').toLowerCase();
+  if (q) props=props.filter(p=>p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q));
+  if (currentRole==='rep') document.getElementById('add-prop-btn').style.display='none';
+  document.getElementById('props-tbl').innerHTML=props.length?`
+    <table><thead><tr>
+      <th>Property</th><th>Client</th><th>Invoice rate</th><th>Renewal</th><th>Weekly fee</th>
+      <th>Assigned rep</th><th>Contract end</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${props.map(p=>`<tr>
+      <td style="font-weight:500">${p.name}</td>
+      <td style="color:var(--text2)">${p.client}</td>
+      <td style="font-family:var(--mono)">${fmtPct(p.invoiceRate)}</td>
+      <td style="font-family:var(--mono)">${p.renewalRate?fmtPct(p.renewalRate):'--'}</td>
+      <td style="font-family:var(--mono)">$${p.weeklyFee}/${p.weeklyFeeType==='daily'?'day':'wk'}</td>
+      <td>${repName(p.repId)}</td>
+      <td style="color:var(--text2)">${p.contractEnd||'Ongoing'}</td>
+      <td>${p.status==='active'?'<span class="badge b-green">active</span>':'<span class="badge b-gray">inactive</span>'}</td>
+      <td><div class="actions">
+        ${currentRole==='admin'?`<button class="btn btn-ghost btn-xs" onclick="openPropertyModal('${p.id}')">Edit</button>`:''}
+        <button class="btn btn-ghost btn-xs" onclick="openOverrideModal(null,'${p.id}')">Override</button>
+      </div></td>
+    </tr>`).join('')}
+    </tbody></table>`:'<div class="empty"><div class="empty-icon">🏢</div>No properties yet</div>';
+}
+
+function filterProperties() { renderProperties(); }
+
+// ── REPS ──────────────────────────────────────────────────────────────────────
+function renderReps() {
+  document.getElementById('reps-tbl').innerHTML=`
+    <table><thead><tr>
+      <th>Rep</th><th>Email</th><th>Role</th><th>Comm %</th><th>Advance</th><th>Min comm</th><th>Base salary</th><th>Type</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${DB.reps.map(r=>`<tr>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${r.initials}</div>
+        <span style="font-weight:500">${r.name}</span>
+      </div></td>
+      <td style="color:var(--text2);font-size:12px">${r.email}</td>
+      <td><span class="role-pill ${r.role==='admin'?'rp-admin':r.role==='manager'?'rp-manager':'rp-rep'}">${r.role}</span></td>
+      <td style="font-family:var(--mono)">${fmtPct(r.commPct)}</td>
+      <td style="font-family:var(--mono)">$${r.advanceAmt}</td>
+      <td style="font-family:var(--mono)">$${r.minCommission}</td>
+      <td style="font-family:var(--mono)">$${(+r.baseSalary).toLocaleString()}</td>
+      <td><span class="badge b-gray">${r.empType}</span></td>
+      <td>${r.status==='active'?'<span class="badge b-green">active</span>':'<span class="badge b-red">inactive</span>'}</td>
+      <td><div class="actions">
+        <button class="btn btn-ghost btn-xs" onclick="openRepModal('${r.id}')">Edit</button>
+        <button class="btn btn-ghost btn-xs" onclick="openOverrideModal(null,null,'${r.id}')">Add override</button>
+      </div></td>
+    </tr>`).join('')}
+    </tbody></table>`;
+}
+
+// ── COMMISSION RULES ──────────────────────────────────────────────────────────
+function commTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('comm-ledger-view').style.display=tab==='ledger'?'':'none';
+  document.getElementById('comm-rules-view').style.display=tab==='rules'?'':'none';
+  commActiveTab=tab;
+  if (tab==='rules') renderCommRulesView();
+}
+
+function renderCommRules() {
+  const repSel=document.getElementById('comm-rep-filter');
+  repSel.innerHTML='<option value="">All reps</option>'+DB.reps.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+  renderCommLedger('');
+}
+
+function renderCommLedger(repFilter) {
+  let leases=currentRole==='rep'?DB.leases.filter(l=>l.repId===currentRepId):DB.leases;
+  if (repFilter) leases=leases.filter(l=>l.repId===repFilter);
+  document.getElementById('comm-ledger-tbl').innerHTML=`
+    <table><thead><tr>
+      <th>Applicant</th><th>Property</th>${currentRole!=='rep'?'<th>Rep</th>':''}
+      <th>Invoice amt</th><th>Advance paid</th><th>Adv. date</th><th>Balance</th><th>Bal. date</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${leases.map(l=>{
+      const comm=calcComm(l);
+      const inv=calcInvoice(l);
+      const adv=+(l.advancePaid||0);
+      const bal=l.commBalPaid?+l.commBalPaid:comm.balance;
+      const st=l.status==='cancelled'?'voided':l.commBalPaid?'paid':adv?'balance due':'pending';
+      return `<tr>
+        <td style="font-weight:500">${l.applicant}</td>
+        <td style="color:var(--text2)">${propName(l.propertyId)}</td>
+        ${currentRole!=='rep'?`<td>${repName(l.repId)}</td>`:''}
+        <td style="font-family:var(--mono)">${fmt$(inv)}</td>
+        <td style="font-family:var(--mono)">${fmt$(adv)}</td>
+        <td style="color:var(--text2)">${l.advancePaidDate||'--'}</td>
+        <td style="font-family:var(--mono)">${l.status==='cancelled'?'--':fmt$(bal)}</td>
+        <td style="color:var(--text2)">${l.commBalPaidDate||'--'}</td>
+        <td>${st==='paid'?'<span class="badge b-green">paid</span>':st==='balance due'?'<span class="badge b-amber">balance due</span>':st==='voided'?'<span class="badge b-red">voided</span>':'<span class="badge b-gray">pending</span>'}</td>
+        <td>${currentRole==='admin'&&l.status!=='cancelled'&&!l.commBalPaid?`<button class="btn btn-ghost btn-xs" onclick="markCommPaid('${l.id}')">Mark paid</button>`:'--'}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+function filterCommLedger(v) { renderCommLedger(v); }
+
+function renderCommRulesView() {
+  document.getElementById('comm-defaults-tbl').innerHTML=`
+    <table><thead><tr><th>Rep</th><th>Comm %</th><th>Advance ($)</th><th>Min commission</th><th>Emp. type</th></tr></thead><tbody>
+    ${DB.reps.map(r=>`<tr>
+      <td style="font-weight:500">${r.name}</td>
+      <td style="font-family:var(--mono)">${fmtPct(r.commPct)}</td>
+      <td style="font-family:var(--mono)">$${r.advanceAmt}</td>
+      <td style="font-family:var(--mono)">$${r.minCommission}</td>
+      <td><span class="badge b-gray">${r.empType}</span></td>
+    </tr>`).join('')}
+    </tbody></table>`;
+
+  document.getElementById('comm-overrides-tbl').innerHTML=DB.overrides.length?`
+    <table><thead><tr><th>Rep</th><th>Property</th><th>Override comm %</th><th>Override advance</th><th>Min comm</th><th>Actions</th></tr></thead><tbody>
+    ${DB.overrides.map((o,i)=>`<tr>
+      <td>${repName(o.repId)}</td><td>${propName(o.propertyId)}</td>
+      <td style="font-family:var(--mono)">${fmtPct(o.commPct)}</td>
+      <td style="font-family:var(--mono)">$${o.advanceAmt}</td>
+      <td style="font-family:var(--mono)">$${o.minCommission||0}</td>
+      <td><button class="btn btn-danger btn-xs" onclick="deleteOverride(${i})">Remove</button></td>
+    </tr>`).join('')}
+    </tbody></table>`
+    :'<div class="empty" style="padding:20px">No overrides. Default rep rules apply to all properties.</div>';
+}
+
+async function markCommPaid(leaseId) {
+  const l=DB.leases.find(x=>x.id===leaseId);
+  if (!l) return;
+  const comm=calcComm(l);
+  await dbUpdate('Leases',leaseId,{commBalPaid:comm.balance,commBalPaidDate:new Date().toISOString().slice(0,10)});
+  l.commBalPaid=comm.balance;
+  l.commBalPaidDate=new Date().toISOString().slice(0,10);
+  renderCommLedger(document.getElementById('comm-rep-filter')?.value||'');
+}
+
+// ── INVOICES ──────────────────────────────────────────────────────────────────
+function renderInvoices() {
+  const propSel=document.getElementById('inv-prop-filter');
+  propSel.innerHTML='<option value="">All properties</option>'+DB.properties.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  filterInvoices();
+}
+
+function filterInvoices() {
+  const pr=document.getElementById('inv-prop-filter')?.value||'';
+  const st=document.getElementById('inv-status-filter')?.value||'';
+  let leases=DB.leases;
+  if (pr) leases=leases.filter(l=>l.propertyId===pr);
+  if (st==='pending') leases=leases.filter(l=>!l.invoiced&&l.status!=='cancelled');
+  if (st==='invoiced') leases=leases.filter(l=>l.invoiced);
+  const total=leases.reduce((s,l)=>s+calcInvoice(l),0);
+  document.getElementById('inv-total').textContent='Total: '+fmt$(total);
+  document.getElementById('inv-tbl').innerHTML=leases.length?`
+    <table><thead><tr>
+      <th>Invoice #</th><th>Property</th><th>Client</th><th>Applicant</th><th>Lease signed</th>
+      <th>Invoice amt</th><th>Move-in</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${leases.map(l=>{
+      const prop=DB.properties.find(p=>p.id===l.propertyId);
+      const amt=calcInvoice(l);
+      const voided=l.status==='cancelled';
+      return `<tr>
+        <td style="font-family:var(--mono)">${l.invoiceNum||'--'}</td>
+        <td style="font-weight:500">${prop?.name||''}</td>
+        <td style="color:var(--text2)">${prop?.client||''}</td>
+        <td>${l.applicant}</td>
+        <td style="color:var(--text2)">${l.dateLeased||'--'}</td>
+        <td style="font-family:var(--mono)">${fmt$(amt)}</td>
+        <td style="color:var(--text2)">${l.miDate||'--'}</td>
+        <td>${voided?'<span class="badge b-red">voided</span>':l.invoiced?'<span class="badge b-green">invoiced</span>':'<span class="badge b-amber">pending</span>'}</td>
+        <td>${!voided&&!l.invoiced?`<button class="btn btn-ghost btn-xs" onclick="markInvoiced('${l.id}')">Mark invoiced</button>`:'--'}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`:'<div class="empty">No invoices</div>';
+}
+
+async function markInvoiced(leaseId) {
+  const l=DB.leases.find(x=>x.id===leaseId);
+  if (!l) return;
+  const num='INV-'+Date.now().toString().slice(-5);
+  await dbUpdate('Leases',leaseId,{invoiced:true,invoiceNum:num});
+  l.invoiced=true; l.invoiceNum=num;
+  filterInvoices();
+}
+
+// ── REPORTS ───────────────────────────────────────────────────────────────────
+function initReports() {
+  const repSel=document.getElementById('rpt-rep-filter');
+  repSel.innerHTML='<option value="">All reps</option>'+DB.reps.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+  setDateRange('this-month',null);
+}
+
+function setDateRange(preset, el) {
+  document.querySelectorAll('.qd').forEach(b=>b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const now=new Date();
+  let from,to;
+  if (preset==='this-month') {
+    from=new Date(now.getFullYear(),now.getMonth(),1);
+    to=new Date(now.getFullYear(),now.getMonth()+1,0);
+  } else if (preset==='last-month') {
+    from=new Date(now.getFullYear(),now.getMonth()-1,1);
+    to=new Date(now.getFullYear(),now.getMonth(),0);
+  } else if (preset==='this-quarter') {
+    const q=Math.floor(now.getMonth()/3);
+    from=new Date(now.getFullYear(),q*3,1);
+    to=new Date(now.getFullYear(),q*3+3,0);
+  } else {
+    from=new Date('2020-01-01'); to=new Date('2099-12-31');
+  }
+  document.getElementById('rpt-from').value=from.toISOString().slice(0,10);
+  document.getElementById('rpt-to').value=to.toISOString().slice(0,10);
+  renderReports();
+}
+
+function renderReports() {
+  const from=document.getElementById('rpt-from')?.value||'';
+  const to=document.getElementById('rpt-to')?.value||'';
+  const repF=document.getElementById('rpt-rep-filter')?.value||'';
+  let leases=DB.leases;
+  if (repF) leases=leases.filter(l=>l.repId===repF);
+
+  // Date filter on miDate for invoices, dateLeased for pipeline
+  const inRange=(d)=>(!from||d>=from)&&(!to||d<=to);
+
+  // Invoice report - filter by move-in date
+  const invLeases=leases.filter(l=>l.miDate&&inRange(l.miDate)&&l.status!=='cancelled');
+  const invTotal=invLeases.reduce((s,l)=>s+calcInvoice(l),0);
+  document.getElementById('rpt-inv-total').textContent=fmt$(invTotal);
+  document.getElementById('rpt-inv-tbl').innerHTML=invLeases.length?`
+    <table><thead><tr><th>Applicant</th><th>Property</th><th>Move-in</th><th>Invoice amt</th><th>Status</th></tr></thead><tbody>
+    ${invLeases.map(l=>`<tr>
+      <td>${l.applicant}</td><td style="color:var(--text2)">${propName(l.propertyId)}</td>
+      <td style="color:var(--text2)">${l.miDate}</td>
+      <td style="font-family:var(--mono)">${fmt$(calcInvoice(l))}</td>
+      <td>${l.invoiced?'<span class="badge b-green">invoiced</span>':'<span class="badge b-amber">pending</span>'}</td>
+    </tr>`).join('')}
+    </tbody></table>`:'<div class="empty">No invoices in this period</div>';
+
+  // Commission payroll - filter by advance date or bal paid date
+  const commLeases=leases.filter(l=>{
+    const d=l.advancePaidDate||l.commBalPaidDate||l.dateLeased||'';
+    return inRange(d)&&l.status!=='cancelled';
+  });
+  const commTotal=commLeases.reduce((s,l)=>s+(+(l.advancePaid||0))+(+(l.commBalPaid||0)),0);
+  document.getElementById('rpt-comm-total').textContent=fmt$(commTotal);
+  document.getElementById('rpt-comm-tbl').innerHTML=commLeases.length?`
+    <table><thead><tr><th>Applicant</th><th>Rep</th><th>Advance paid</th><th>Balance paid</th><th>Total comm</th></tr></thead><tbody>
+    ${commLeases.map(l=>`<tr>
+      <td>${l.applicant}</td>
+      <td style="color:var(--text2)">${repName(l.repId)}</td>
+      <td style="font-family:var(--mono)">${fmt$(l.advancePaid||0)}</td>
+      <td style="font-family:var(--mono)">${l.commBalPaid?fmt$(l.commBalPaid):'<span style="color:var(--amber)">pending</span>'}</td>
+      <td style="font-family:var(--mono)">${fmt$((+(l.advancePaid||0))+(+(l.commBalPaid||0)))}</td>
+    </tr>`).join('')}
+    </tbody></table>`:'<div class="empty">No commission activity in this period</div>';
+
+  // Pipeline
+  const pipe=leases.filter(l=>l.dateLeased&&inRange(l.dateLeased));
+  document.getElementById('rpt-pipeline-tbl').innerHTML=pipe.length?`
+    <table><thead><tr><th>Applicant</th><th>Property</th><th>Signed</th><th>Move-in</th><th>Status</th><th>Invoice amt</th></tr></thead><tbody>
+    ${pipe.map(l=>`<tr>
+      <td style="font-weight:500">${l.applicant}</td>
+      <td style="color:var(--text2)">${propName(l.propertyId)}</td>
+      <td style="color:var(--text2)">${l.dateLeased||'--'}</td>
+      <td style="color:var(--text2)">${l.miDate||'--'}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td style="font-family:var(--mono)">${fmt$(calcInvoice(l))}</td>
+    </tr>`).join('')}
+    </tbody></table>`:'<div class="empty">No lease activity in this period</div>';
+
+  // Exceptions
+  const exc=leases.filter(l=>l.status==='cancelled'&&l.dateLeased&&inRange(l.dateLeased));
+  document.getElementById('rpt-exceptions-tbl').innerHTML=exc.length?`
+    <table><thead><tr><th>Applicant</th><th>Property</th><th>Rep</th><th>Advance paid</th><th>Clawback</th><th>Notes</th></tr></thead><tbody>
+    ${exc.map(l=>`<tr>
+      <td style="font-weight:500">${l.applicant}</td>
+      <td style="color:var(--text2)">${propName(l.propertyId)}</td>
+      <td>${repName(l.repId)}</td>
+      <td style="font-family:var(--mono)">${fmt$(l.advancePaid||0)}</td>
+      <td>${l.clawback?'<span class="badge b-red">yes</span>':'<span class="badge b-gray">no - company eats</span>'}</td>
+      <td style="color:var(--text2)">${l.notes||'--'}</td>
+    </tr>`).join('')}
+    </tbody></table>`:'<div class="empty">No exceptions in this period</div>';
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+function exportCSV(type) {
+  let rows=[],filename='';
+  if (type==='invoices') {
+    rows=[['Invoice #','Property','Client','Applicant','Date Leased','Invoice Amt','Move-in Date','Status']];
+    DB.leases.forEach(l=>{
+      const p=DB.properties.find(x=>x.id===l.propertyId);
+      rows.push([l.invoiceNum||'',p?.name||'',p?.client||'',l.applicant,l.dateLeased||'',calcInvoice(l).toFixed(2),l.miDate||'',l.invoiced?'invoiced':'pending']);
+    });
+    filename='ledgr_invoices.csv';
+  } else {
+    const from=document.getElementById('rpt-from')?.value||'';
+    const to=document.getElementById('rpt-to')?.value||'';
+    rows=[['Applicant','Property','Rep','Date Leased','Move-in','Invoice Amt','Advance Paid','Comm Balance','Status']];
+    DB.leases.forEach(l=>{
+      const d=l.miDate||l.dateLeased||'';
+      if ((!from||d>=from)&&(!to||d<=to)) {
+        rows.push([l.applicant,propName(l.propertyId),repName(l.repId),l.dateLeased||'',l.miDate||'',calcInvoice(l).toFixed(2),l.advancePaid||0,l.commBalPaid||0,l.status]);
+      }
+    });
+    filename='ledgr_report.csv';
+  }
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv,'+encodeURIComponent(csv);
+  a.download=filename;
+  a.click();
+}
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+function openModal(html) {
+  document.getElementById('modal-box').innerHTML=html;
+  document.getElementById('modal-overlay').style.display='flex';
+}
+function closeModal(e) {
+  if (!e||e.target===document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').style.display='none';
+  }
+}
+
+function openLeaseModal(leaseId) {
+  const l=leaseId?DB.leases.find(x=>x.id===leaseId):null;
+  const props=DB.properties.map(p=>`<option value="${p.id}" ${l?.propertyId===p.id?'selected':''}>${p.name}</option>`).join('');
+  const reps=DB.reps.map(r=>`<option value="${r.id}" ${l?.repId===r.id?'selected':''}>${r.name}</option>`).join('');
+  const sReps='<option value="">None</option>'+DB.reps.map(r=>`<option value="${r.id}" ${l?.splitRepId===r.id?'selected':''}>${r.name}</option>`).join('');
+  openModal(`
+    <div class="modal-title">${l?'Edit lease':'New lease'}</div>
+    <div class="modal-sub">${l?l.applicant:'Enter lease details below'}</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Property</label><select class="form-select" id="f-prop">${props}</select></div>
+      <div class="form-group"><label class="form-label">Assigned rep</label><select class="form-select" id="f-rep">${reps}</select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Applicant name</label><input class="form-input" id="f-applicant" value="${l?.applicant||''}"></div>
+      <div class="form-group"><label class="form-label">Unit / Apt</label><input class="form-input" id="f-apt" value="${l?.apt||''}"></div>
+    </div>
+    <div class="form-row-3">
+      <div class="form-group"><label class="form-label">Monthly rent ($)</label><input class="form-input" id="f-rent" type="number" value="${l?.rent||''}"></div>
+      <div class="form-group"><label class="form-label">Lease term (months)</label><input class="form-input" id="f-term" type="number" value="${l?.leaseTerm||12}"></div>
+      <div class="form-group"><label class="form-label">Effective term (months)</label><input class="form-input" id="f-effterm" type="number" step="0.5" value="${l?.effectiveTerm||''}"><div class="form-note">After free rent / promo deduction</div></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Promo / Special</label><input class="form-input" id="f-promo" value="${l?.promo||''}"></div>
+      <div class="form-group"><label class="form-label">Promo type</label>
+        <select class="form-select" id="f-promotype">
+          <option value="none" ${!l?.promoType||l?.promoType==='none'?'selected':''}>Non-monetary (free bike etc.)</option>
+          <option value="term_reducing" ${l?.promoType==='term_reducing'?'selected':''}>Term-reducing (free rent)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date leased</label><input class="form-input" id="f-dateleased" type="date" value="${l?.dateLeased||''}"></div>
+      <div class="form-group"><label class="form-label">Move-in date</label><input class="form-input" id="f-mi" type="date" value="${l?.miDate||''}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Status</label>
+      <select class="form-select" id="f-status">
+        <option value="pending" ${l?.status==='pending'?'selected':''}>Pending</option>
+        <option value="approved" ${l?.status==='approved'?'selected':''}>Approved</option>
+        <option value="moved_in" ${l?.status==='moved_in'?'selected':''}>Moved in</option>
+        <option value="cancelled" ${l?.status==='cancelled'?'selected':''}>Cancelled</option>
+      </select>
+    </div>
+    <div class="divider-label">Commission split (optional)</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Split commission with</label><select class="form-select" id="f-split">${sReps}</select></div>
+      <div class="form-group"><label class="form-label">Split % to second rep</label><input class="form-input" id="f-splitpct" type="number" min="0" max="100" step="5" value="${l?.splitPct?l.splitPct*100:0}"><div class="form-note">e.g. 50 = 50/50 split</div></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes">${l?.notes||''}</textarea></div>
+    <div class="modal-footer">
+      ${l?`<div class="modal-footer-left"><button class="btn btn-danger btn-sm" onclick="deleteLease('${l.id}')">Delete</button></div>`:''}
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveLease('${l?.id||''}')">Save lease</button>
+    </div>
+  `);
+}
+
+async function saveLease(leaseId) {
+  const rep=DB.reps.find(r=>r.id===document.getElementById('f-rep').value);
+  const status=document.getElementById('f-status').value;
+  const data={
+    propertyId:document.getElementById('f-prop').value,
+    repId:document.getElementById('f-rep').value,
+    applicant:document.getElementById('f-applicant').value,
+    apt:document.getElementById('f-apt').value,
+    rent:parseFloat(document.getElementById('f-rent').value)||0,
+    leaseTerm:parseFloat(document.getElementById('f-term').value)||12,
+    effectiveTerm:parseFloat(document.getElementById('f-effterm').value)||parseFloat(document.getElementById('f-term').value)||12,
+    promo:document.getElementById('f-promo').value,
+    promoType:document.getElementById('f-promotype').value,
+    dateLeased:document.getElementById('f-dateleased').value,
+    miDate:document.getElementById('f-mi').value,
+    status,
+    notes:document.getElementById('f-notes').value,
+    splitRepId:document.getElementById('f-split').value,
+    splitPct:(parseFloat(document.getElementById('f-splitpct').value)||0)/100,
+  };
+  if (leaseId) {
+    await dbUpdate('Leases',leaseId,data);
+    Object.assign(DB.leases.find(x=>x.id===leaseId),data);
+  } else {
+    data.id='l'+Date.now();
+    data.invoiced=false;
+    data.advancePaid=(status==='approved'||status==='moved_in')?(rep?.advanceAmt||0):0;
+    data.advancePaidDate=data.advancePaid?new Date().toISOString().slice(0,10):'';
+    data.commBalPaid=0; data.commBalPaidDate=''; data.invoiceNum=''; data.invoiceAmt=0; data.clawback=false;
+    await dbWrite('Leases',data);
+    DB.leases.push(data);
+  }
+  closeModal();
+  filterLeases();
+  updatePendingBadge();
+}
+
+async function deleteLease(leaseId) {
+  if (confirm('Delete this lease record? This cannot be undone.')) {
+    await dbDelete('Leases',leaseId);
+    DB.leases=DB.leases.filter(l=>l.id!==leaseId);
+    closeModal(); filterLeases(); updatePendingBadge();
+  }
+}
+
+function openStatusModal(leaseId) {
+  const l=DB.leases.find(x=>x.id===leaseId);
+  openModal(`
+    <div class="modal-title">Update lease status</div>
+    <div class="modal-sub">${l.applicant} — ${propName(l.propertyId)}</div>
+    <div class="form-group"><label class="form-label">New status</label>
+      <select class="form-select" id="f-newstatus" onchange="toggleClawback(this.value)">
+        <option value="pending" ${l.status==='pending'?'selected':''}>Pending</option>
+        <option value="approved" ${l.status==='approved'?'selected':''}>Approved</option>
+        <option value="moved_in" ${l.status==='moved_in'?'selected':''}>Moved in</option>
+        <option value="cancelled" ${l.status==='cancelled'?'selected':''}>Cancelled</option>
+      </select>
+    </div>
+    <div id="clawback-section" style="display:${l.status==='cancelled'?'':'none'}">
+      <div class="divider-label">Cancellation options</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0">
+        <input type="checkbox" id="f-clawback" ${l.clawback?'checked':''}>
+        <div>
+          <div style="font-size:13px;font-weight:500">Trigger clawback</div>
+          <div style="font-size:11px;color:var(--text3)">If checked, advance must be returned. If unchecked, company absorbs the cost.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="applyStatus('${leaseId}')">Update status</button>
+    </div>
+  `);
+}
+
+function toggleClawback(v) {
+  document.getElementById('clawback-section').style.display=v==='cancelled'?'':'none';
+}
+
+async function applyStatus(leaseId) {
+  const l=DB.leases.find(x=>x.id===leaseId);
+  const newStatus=document.getElementById('f-newstatus').value;
+  const clawback=document.getElementById('f-clawback')?.checked||false;
+  const updates={status:newStatus,clawback};
+  if (newStatus==='cancelled'&&clawback) { updates.advancePaid=0; updates.advancePaidDate=''; }
+  if (newStatus==='moved_in'&&!l.commBalPaid) {
+    const comm=calcComm({...l,...updates});
+    updates.commBalPaid=comm.balance;
+    updates.commBalPaidDate='';
+  }
+  await dbUpdate('Leases',leaseId,updates);
+  Object.assign(l,updates);
+  closeModal(); filterLeases(); updatePendingBadge();
+}
+
+function openPropertyModal(propId) {
+  const p=propId?DB.properties.find(x=>x.id===propId):null;
+  const reps=DB.reps.map(r=>`<option value="${r.id}" ${p?.repId===r.id?'selected':''}>${r.name}</option>`).join('');
+  openModal(`
+    <div class="modal-title">${p?'Edit property':'Add property'}</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Property name</label><input class="form-input" id="f-pname" value="${p?.name||''}"></div>
+      <div class="form-group"><label class="form-label">Client name</label><input class="form-input" id="f-pclient" value="${p?.client||''}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Invoicing email(s)</label><input class="form-input" id="f-pemail" value="${p?.invoicingEmail||''}"></div>
+    <div class="form-row-3">
+      <div class="form-group"><label class="form-label">Invoice rate (%)</label><input class="form-input" id="f-prate" type="number" step="0.5" value="${p?(p.invoiceRate*100).toFixed(1):''}"></div>
+      <div class="form-group"><label class="form-label">Renewal rate (%)</label><input class="form-input" id="f-prenew" type="number" step="0.5" value="${p?(p.renewalRate*100).toFixed(1):'0'}"></div>
+      <div class="form-group"><label class="form-label">Fee amount ($)</label><input class="form-input" id="f-pfee" type="number" value="${p?.weeklyFee||700}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Fee frequency</label>
+        <select class="form-select" id="f-pfeetype">
+          <option value="weekly" ${p?.weeklyFeeType!=='daily'?'selected':''}>Weekly</option>
+          <option value="daily" ${p?.weeklyFeeType==='daily'?'selected':''}>Daily</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Assigned rep</label><select class="form-select" id="f-prep">${reps}</select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Contract start</label><input class="form-input" id="f-pstart" type="date" value="${p?.contractStart||''}"></div>
+      <div class="form-group"><label class="form-label">Contract end</label><input class="form-input" id="f-pend" type="date" value="${p?.contractEnd||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Address</label><input class="form-input" id="f-paddress" value="${p?.address||''}"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-select" id="f-pstatus">
+          <option value="active" ${p?.status!=='inactive'?'selected':''}>Active</option>
+          <option value="inactive" ${p?.status==='inactive'?'selected':''}>Inactive</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-pnotes">${p?.notes||''}</textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveProperty('${p?.id||''}')">Save property</button>
+    </div>
+  `);
+}
+
+async function saveProperty(propId) {
+  const data={
+    name:document.getElementById('f-pname').value,
+    client:document.getElementById('f-pclient').value,
+    invoicingEmail:document.getElementById('f-pemail').value,
+    invoiceRate:parseFloat(document.getElementById('f-prate').value)/100||0,
+    renewalRate:parseFloat(document.getElementById('f-prenew').value)/100||0,
+    weeklyFee:parseFloat(document.getElementById('f-pfee').value)||700,
+    weeklyFeeType:document.getElementById('f-pfeetype').value,
+    repId:document.getElementById('f-prep').value,
+    contractStart:document.getElementById('f-pstart').value,
+    contractEnd:document.getElementById('f-pend').value,
+    address:document.getElementById('f-paddress').value,
+    status:document.getElementById('f-pstatus').value,
+    invoiceType:'percent',
+    notes:document.getElementById('f-pnotes').value,
+  };
+  if (propId) { await dbUpdate('Properties',propId,data); Object.assign(DB.properties.find(x=>x.id===propId),data); }
+  else { data.id='p'+Date.now(); await dbWrite('Properties',data); DB.properties.push(data); }
+  closeModal(); renderProperties();
+}
+
+function openRepModal(repId) {
+  const r=repId?DB.reps.find(x=>x.id===repId):null;
+  openModal(`
+    <div class="modal-title">${r?'Edit rep':'Add rep'}</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="f-rname" value="${r?.name||''}"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-remail" value="${r?.email||''}"></div>
+    </div>
+    <div class="form-row-3">
+      <div class="form-group"><label class="form-label">Commission %</label><input class="form-input" id="f-rcomm" type="number" step="0.1" value="${r?(r.commPct*100).toFixed(2):''}"><div class="form-note">e.g. 1.5 = 1.5%</div></div>
+      <div class="form-group"><label class="form-label">Advance amount ($)</label><input class="form-input" id="f-radvance" type="number" value="${r?.advanceAmt||0}"></div>
+      <div class="form-group"><label class="form-label">Min commission ($)</label><input class="form-input" id="f-rmin" type="number" value="${r?.minCommission||0}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Base salary ($)</label><input class="form-input" id="f-rsalary" type="number" value="${r?.baseSalary||0}"></div>
+      <div class="form-group"><label class="form-label">Employment type</label>
+        <select class="form-select" id="f-remptype">
+          <option ${r?.empType==='FT'?'selected':''}>FT</option>
+          <option ${r?.empType==='PT'?'selected':''}>PT</option>
+          <option ${r?.empType==='Contractor'?'selected':''}>Contractor</option>
+          <option ${r?.empType==='Mgmt'?'selected':''}>Mgmt</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Role / access level</label>
+        <select class="form-select" id="f-rrole">
+          <option value="rep" ${r?.role==='rep'?'selected':''}>Rep (own data only)</option>
+          <option value="manager" ${r?.role==='manager'?'selected':''}>Manager (all leases, no admin)</option>
+          <option value="admin" ${r?.role==='admin'?'selected':''}>Admin (full access)</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-select" id="f-rstatus">
+          <option value="active" ${r?.status!=='inactive'?'selected':''}>Active</option>
+          <option value="inactive" ${r?.status==='inactive'?'selected':''}>Inactive</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Initials (2-3 chars)</label><input class="form-input" id="f-rinitials" maxlength="3" value="${r?.initials||''}"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveRep('${r?.id||''}')">Save rep</button>
+    </div>
+  `);
+}
+
+async function saveRep(repId) {
+  const data={
+    name:document.getElementById('f-rname').value,
+    email:document.getElementById('f-remail').value,
+    commPct:parseFloat(document.getElementById('f-rcomm').value)/100||0,
+    advanceAmt:parseFloat(document.getElementById('f-radvance').value)||0,
+    minCommission:parseFloat(document.getElementById('f-rmin').value)||0,
+    baseSalary:parseFloat(document.getElementById('f-rsalary').value)||0,
+    empType:document.getElementById('f-remptype').value,
+    role:document.getElementById('f-rrole').value,
+    status:document.getElementById('f-rstatus').value,
+    initials:document.getElementById('f-rinitials').value.toUpperCase(),
+  };
+  if (repId) { await dbUpdate('Reps',repId,data); Object.assign(DB.reps.find(x=>x.id===repId),data); }
+  else { data.id='r'+Date.now(); await dbWrite('Reps',data); DB.reps.push(data); }
+  closeModal(); renderReps();
+}
+
+function openOverrideModal(idx, propId, repId) {
+  const props=DB.properties.map(p=>`<option value="${p.id}" ${p.id===propId?'selected':''}>${p.name}</option>`).join('');
+  const reps=DB.reps.map(r=>`<option value="${r.id}" ${r.id===repId?'selected':''}>${r.name}</option>`).join('');
+  openModal(`
+    <div class="modal-title">Add commission override</div>
+    <div class="modal-sub">Override a rep's default commission rules for a specific property</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Rep</label><select class="form-select" id="f-orep">${reps}</select></div>
+      <div class="form-group"><label class="form-label">Property</label><select class="form-select" id="f-oprop">${props}</select></div>
+    </div>
+    <div class="form-row-3">
+      <div class="form-group"><label class="form-label">Commission % override</label><input class="form-input" id="f-ocomm" type="number" step="0.1" placeholder="Leave blank for default"></div>
+      <div class="form-group"><label class="form-label">Advance $ override</label><input class="form-input" id="f-oadvance" type="number" placeholder="Leave blank for default"></div>
+      <div class="form-group"><label class="form-label">Min commission override</label><input class="form-input" id="f-omin" type="number" placeholder="Leave blank for default"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveOverride()">Save override</button>
+    </div>
+  `);
+}
+
+async function saveOverride() {
+  const repId=document.getElementById('f-orep').value;
+  const propId=document.getElementById('f-oprop').value;
+  const rep=DB.reps.find(r=>r.id===repId);
+  const cv=document.getElementById('f-ocomm').value;
+  const av=document.getElementById('f-oadvance').value;
+  const mv=document.getElementById('f-omin').value;
+  const ov={id:'ov'+Date.now(),repId,propertyId:propId,commPct:cv?parseFloat(cv)/100:rep.commPct,advanceAmt:av?parseFloat(av):rep.advanceAmt,minCommission:mv?parseFloat(mv):rep.minCommission};
+  DB.overrides=DB.overrides.filter(o=>!(o.repId===repId&&o.propertyId===propId));
+  await dbWrite('Overrides',ov);
+  DB.overrides.push(ov);
+  closeModal();
+  if (commActiveTab==='rules') renderCommRulesView();
+}
+
+async function deleteOverride(i) {
+  const ov=DB.overrides[i];
+  await dbDelete('Overrides',ov.id);
+  DB.overrides.splice(i,1);
+  renderCommRulesView();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+if (API_URL) {
+  DB_LIVE=true;
+  updateDbStatusBadges();
+  document.getElementById('api-url-input')&&(document.getElementById('api-url-input').value=API_URL);
+  loadFromDB().then(()=>nav('dashboard'));
+} else {
+  nav('dashboard');
+  updatePendingBadge();
+}
+</script>
+</body>
+</html>
