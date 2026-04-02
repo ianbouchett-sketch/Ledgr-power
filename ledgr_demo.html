@@ -1798,26 +1798,46 @@ async function deleteOverride(i) {
 
 let currentUser = null;
 
+function applyRoleNav(role) {
+  const adminEls = ['sb-admin','nav-reps','nav-invoices'];
+  const reportsLabelEl = document.getElementById('nav-reports-label');
+  const commNavEl = document.getElementById('nav-comm-rules');
+
+  if (role === 'admin') {
+    adminEls.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=''; });
+    if (commNavEl) { commNavEl.style.display=''; commNavEl.childNodes[commNavEl.childNodes.length-1].textContent=' Commission Rules'; }
+    document.getElementById('nav-reports').style.display='';
+    if (reportsLabelEl) reportsLabelEl.textContent='Reports';
+  } else if (role === 'manager') {
+    adminEls.forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+    if (commNavEl) { commNavEl.style.display=''; commNavEl.childNodes[commNavEl.childNodes.length-1].textContent=' Commission Rules'; }
+    document.getElementById('nav-reports').style.display='';
+    if (reportsLabelEl) reportsLabelEl.textContent='Reports';
+  } else {
+    // Rep: hide admin items, relabel accessible items
+    adminEls.forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+    if (commNavEl) { commNavEl.style.display=''; commNavEl.childNodes[commNavEl.childNodes.length-1].textContent=' My Commissions'; }
+    document.getElementById('nav-reports').style.display='';
+    if (reportsLabelEl) reportsLabelEl.textContent='My Activity';
+  }
+}
+
 function demoLogin(role, name, initials) {
   try {
     currentRole = role;
     currentRepId = role === 'rep' ? 'r2' : null;
     currentUser = { name, role, initials };
 
-    // Update sidebar user display
     document.getElementById('u-av').textContent = initials;
     document.getElementById('u-name').textContent = name;
     document.getElementById('u-role').textContent = role;
     document.getElementById('u-role').className = `role-pill ${role==='admin'?'rp-admin':role==='manager'?'rp-manager':'rp-rep'}`;
 
-    // Apply nav visibility
     applyRoleNav(role);
 
-    // Hide login screen and ensure app is visible
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
 
-    // Navigate to dashboard
     if (API_URL) {
       DB_LIVE = true;
       updateDbStatusBadges();
@@ -1828,7 +1848,6 @@ function demoLogin(role, name, initials) {
     }
   } catch(e) {
     console.error('demoLogin error:', e);
-    // Fallback: just hide login and show app
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     document.getElementById('pg-dashboard').style.display = '';
