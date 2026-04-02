@@ -888,25 +888,6 @@ function nav(page) {
   if (renders[page]) renders[page]();
 }
 
-function setRole(role) {
-  currentRole = role;
-  document.querySelectorAll('.view-toggle button').forEach(b=>b.className='vt-off');
-  event.target.className = 'vt-on';
-  const roleMap = {admin:{name:'Admin',initials:'AU',cls:'rp-admin'}, manager:{name:'April (Mgr)',initials:'AP',cls:'rp-manager'}, rep:{name:'Amanda (Rep)',initials:'AM',cls:'rp-rep'}};
-  const r = roleMap[role];
-  document.getElementById('u-av').textContent = r.initials;
-  document.getElementById('u-name').textContent = r.name;
-  document.getElementById('u-role').textContent = role;
-  document.getElementById('u-role').className = 'role-pill ' + r.cls;
-  const adminOnly = ['sb-admin','nav-reps','nav-comm-rules','nav-invoices'];
-  adminOnly.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = (role==='admin') ? '' : 'none';
-  });
-  if (role==='rep') nav('leases');
-  else nav('dashboard');
-}
-
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function statusBadge(s) {
   const m = {approved:'b-green approved', moved_in:'b-blue moved in', pending:'b-amber pending', cancelled:'b-red cancelled'};
@@ -1818,26 +1799,39 @@ async function deleteOverride(i) {
 let currentUser = null;
 
 function demoLogin(role, name, initials) {
-  currentRole = role;
-  currentRepId = role === 'rep' ? 'r2' : null; // Amanda for rep demo
+  try {
+    currentRole = role;
+    currentRepId = role === 'rep' ? 'r2' : null;
+    currentUser = { name, role, initials };
 
-  currentUser = { name, role, initials };
+    // Update sidebar user display
+    document.getElementById('u-av').textContent = initials;
+    document.getElementById('u-name').textContent = name;
+    document.getElementById('u-role').textContent = role;
+    document.getElementById('u-role').className = `role-pill ${role==='admin'?'rp-admin':role==='manager'?'rp-manager':'rp-rep'}`;
 
-  document.getElementById('u-av').textContent = initials;
-  document.getElementById('u-name').textContent = name;
-  document.getElementById('u-role').textContent = role;
-  document.getElementById('u-role').className = `role-pill ${role==='admin'?'rp-admin':role==='manager'?'rp-manager':'rp-rep'}`;
+    // Apply nav visibility
+    applyRoleNav(role);
 
-  applyRoleNav(role);
-  document.getElementById('login-screen').style.display = 'none';
+    // Hide login screen and ensure app is visible
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
 
-  if (API_URL) {
-    DB_LIVE = true;
-    updateDbStatusBadges();
-    loadFromDB().then(() => { updatePendingBadge(); nav('dashboard'); });
-  } else {
-    updatePendingBadge();
-    nav('dashboard');
+    // Navigate to dashboard
+    if (API_URL) {
+      DB_LIVE = true;
+      updateDbStatusBadges();
+      loadFromDB().then(() => { updatePendingBadge(); nav('dashboard'); });
+    } else {
+      updatePendingBadge();
+      nav('dashboard');
+    }
+  } catch(e) {
+    console.error('demoLogin error:', e);
+    // Fallback: just hide login and show app
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('pg-dashboard').style.display = '';
   }
 }
 
