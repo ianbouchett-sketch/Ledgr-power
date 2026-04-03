@@ -211,6 +211,10 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
 .status-sel.s-paid{background-color:rgba(120,214,73,0.15);color:#78d649;border:1px solid rgba(120,214,73,0.3)}
 .status-sel.s-balance_due{background-color:rgba(255,180,0,0.15);color:#f5a623;border:1px solid rgba(255,180,0,0.3)}
 .status-sel.s-voided{background-color:rgba(220,60,60,0.15);color:#e05555;border:1px solid rgba(220,60,60,0.3)}
+.status-sel.s-complete{background-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.1)}
+tr.lease-complete{opacity:0.45}
+tr.lease-complete:hover{opacity:0.7}
+.b-complete{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4)}
 /* Commission tooltip */
 .comm-tip{position:relative;cursor:help;border-bottom:1px dashed rgba(255,255,255,0.25)}
 .comm-tip .tip-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:11px;white-space:nowrap;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,0.4);font-family:var(--mono);line-height:1.7;color:var(--text2)}
@@ -222,6 +226,36 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
 .mini-bar-fill{height:100%;border-radius:3px;background:var(--green);transition:width 0.4s}
 /* Settings flyout */
 .settings-active svg{color:rgba(255,255,255,0.8) !important}
+/* Tutorial modal */
+#tutorial-overlay{position:fixed;inset:0;background:rgba(10,9,20,0.7);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.tut-modal{background:var(--surface);border:0.5px solid var(--border);border-radius:16px;width:min(740px,95vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.5)}
+.tut-header{padding:22px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.tut-title{font-size:19px;font-weight:600;color:var(--text)}
+.tut-subtitle{font-size:12px;color:var(--text3);margin-top:3px}
+.tut-close{background:transparent;border:none;cursor:pointer;color:var(--text3);padding:4px;border-radius:6px;line-height:0}
+.tut-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.tut-tabs{display:flex;gap:2px;padding:16px 28px 0;flex-shrink:0;overflow-x:auto;border-bottom:0.5px solid var(--border)}
+.tut-tab{padding:7px 14px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-radius:8px 8px 0 0;border-bottom:2px solid transparent;white-space:nowrap;background:transparent;border-top:none;border-left:none;border-right:none;font-family:var(--font);transition:all 0.12s}
+.tut-tab:hover{color:var(--text2);background:rgba(255,255,255,0.04)}
+.tut-tab.active{color:var(--green);border-bottom-color:var(--green);background:rgba(120,214,73,0.06)}
+.tut-body{flex:1;overflow-y:auto;padding:24px 28px}
+.tut-section{margin-bottom:24px}
+.tut-section:last-child{margin-bottom:0}
+.tut-section-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.tut-section-title .tut-icon{width:22px;height:22px;border-radius:6px;background:rgba(120,214,73,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.tut-p{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:6px}
+.tut-steps{list-style:none;padding:0;margin:8px 0}
+.tut-steps li{font-size:12px;color:var(--text2);line-height:1.7;padding:5px 0 5px 22px;position:relative;border-bottom:0.5px solid var(--border)}
+.tut-steps li:last-child{border-bottom:none}
+.tut-steps li::before{content:attr(data-n);position:absolute;left:0;top:7px;width:16px;height:16px;background:var(--green);color:var(--navy);border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.tut-note{background:rgba(120,214,73,0.07);border:0.5px solid rgba(120,214,73,0.2);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.65;margin:10px 0}
+.tut-warn{background:rgba(255,180,0,0.08);border:0.5px solid rgba(255,180,0,0.25);border-radius:8px;padding:10px 12px;font-size:11px;color:#f5a623;line-height:1.65;margin:10px 0}
+.tut-badge-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tut-kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0}
+.tut-kv dt{font-size:11px;font-weight:600;color:var(--text3);padding-top:2px;white-space:nowrap}
+.tut-kv dd{font-size:12px;color:var(--text2);line-height:1.6;margin:0}
+.tut-footer{padding:16px 28px;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tut-footer-note{font-size:11px;color:var(--text3)}
 @media(max-width:900px){
   .stat-grid{grid-template-columns:1fr 1fr}
   .form-row-3{grid-template-columns:1fr 1fr}
@@ -315,6 +349,9 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
         </button>
       </div>
       <div style="padding:6px 8px;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-top:2px">Account</div>
+      <button onclick="openTutorial()" style="width:100%;text-align:left;padding:7px 10px;background:transparent;border:none;cursor:pointer;color:var(--text2);font-family:var(--font);font-size:12px;border-radius:6px;transition:background 0.12s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
+        <span style="margin-right:6px">📖</span>View tutorial
+      </button>
       <button onclick="signOut()" style="width:100%;text-align:left;padding:7px 10px;background:transparent;border:none;cursor:pointer;color:var(--text2);font-family:var(--font);font-size:12px;border-radius:6px;transition:background 0.12s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
         <span style="margin-right:6px">↪</span>Sign out
       </button>
@@ -337,7 +374,7 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
     </div>
     <div class="page-content">
       <div class="stat-grid" id="stat-grid"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
         <div class="card">
           <div class="card-header"><span class="card-title">Recent leases</span><button class="btn btn-ghost btn-sm" onclick="nav('leases')">View all</button></div>
           <div id="dash-recent"></div>
@@ -345,6 +382,19 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
         <div class="card">
           <div class="card-header"><span class="card-title">Pending commissions</span><button class="btn btn-ghost btn-sm" onclick="nav('comm-rules')">Manage</button></div>
           <div id="dash-pending-comm"></div>
+        </div>
+      </div>
+      <!-- Admin-only profitability section -->
+      <div id="dash-profit-section" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Top properties — revenue</span><span style="font-size:10px;color:var(--text3)">all time</span></div>
+            <div id="dash-top-props"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Top reps — commissions earned</span><span style="font-size:10px;color:var(--text3)">all time</span></div>
+            <div id="dash-top-reps"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -423,6 +473,7 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
     <div class="page-content">
       <div class="tabs">
         <div class="tab active" onclick="commTab('ledger',this)">Commission ledger</div>
+        <div class="tab" id="tab-payroll" onclick="commTab('payroll',this)">Payroll report</div>
         <div class="tab" onclick="commTab('rules',this)">Rules &amp; overrides</div>
       </div>
       <div id="comm-ledger-view">
@@ -435,6 +486,34 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
           </div>
           <div class="tbl-wrap" id="comm-ledger-tbl"></div>
         </div>
+      </div>
+      <div id="comm-payroll-view" style="display:none">
+        <!-- date range filter -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div class="date-range">
+                <input type="date" id="pay-from" onchange="renderPayroll()">
+                <span class="dr-sep">to</span>
+                <input type="date" id="pay-to" onchange="renderPayroll()">
+              </div>
+              <div class="quick-dates">
+                <button class="qd" onclick="setPayDateRange('this-month',this)">This month</button>
+                <button class="qd" onclick="setPayDateRange('last-month',this)">Last month</button>
+                <button class="qd" onclick="setPayDateRange('this-quarter',this)">This quarter</button>
+                <button class="qd" onclick="setPayDateRange('all',this)">All unpaid</button>
+              </div>
+              <select class="form-select" style="width:auto" id="pay-rep-filter" onchange="renderPayroll()">
+                <option value="">All reps</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" onclick="exportPayrollCSV()">Export CSV</button>
+            </div>
+          </div>
+        </div>
+        <!-- summary tiles -->
+        <div id="payroll-summary-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px"></div>
+        <!-- per-rep breakdown -->
+        <div id="payroll-rep-breakdown"></div>
       </div>
       <div id="comm-rules-view" style="display:none">
         <div class="card" style="margin-bottom:14px">
@@ -452,8 +531,8 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
   <!-- INVOICES -->
   <div id="pg-invoices" class="pg" style="display:none">
     <div class="page-header">
-      <div class="ph-left"><div class="pg-title">Invoices</div><div class="pg-sub">Showing moved-in leases ready to bill. Use filters to see pipeline or voided invoices.</div></div>
-      <div class="ph-right">
+      <div class="ph-left"><div class="pg-title">Invoices</div><div class="pg-sub" id="inv-sub">Lease invoices and retainer billing</div></div>
+      <div class="ph-right" id="inv-header-actions">
         <select class="form-select" style="width:auto" onchange="filterInvoices()" id="inv-prop-filter">
           <option value="">All properties</option>
         </select>
@@ -468,9 +547,29 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
       </div>
     </div>
     <div class="page-content">
-      <div class="card">
-        <div class="card-header"><span class="card-title">Invoice ledger</span><span class="chip" id="inv-total"></span></div>
-        <div class="tbl-wrap" id="inv-tbl"></div>
+      <div class="tabs" style="margin-bottom:0">
+        <div class="tab active" onclick="invTab('leases',this)">Lease invoices</div>
+        <div class="tab" onclick="invTab('retainer',this)">Retainer invoices</div>
+      </div>
+      <!-- Lease invoices -->
+      <div id="inv-leases-view">
+        <div class="card" style="border-radius:0 8px 8px 8px">
+          <div class="card-header"><span class="card-title">Lease invoice ledger</span><span class="chip" id="inv-total"></span></div>
+          <div class="tbl-wrap" id="inv-tbl"></div>
+        </div>
+      </div>
+      <!-- Retainer invoices -->
+      <div id="inv-retainer-view" style="display:none">
+        <div class="card" style="margin-bottom:14px;border-radius:0 8px 8px 8px">
+          <div class="card-header">
+            <span class="card-title">Retainer schedule</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="chip" id="inv-ret-total"></span>
+              <button class="btn btn-green btn-sm" onclick="openGenerateRetainerModal()">+ Generate retainer invoices</button>
+            </div>
+          </div>
+          <div class="tbl-wrap" id="inv-ret-tbl"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -538,6 +637,11 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
 
       <!-- Invoice + pipeline (admin/manager only) -->
       <div id="rpt-admin-section">
+        <!-- Profitability summary -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-header"><span class="card-title">Property profitability</span><span class="chip" id="rpt-profit-total"></span></div>
+          <div id="rpt-profit-tbl"></div>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
           <div class="card">
             <div class="card-header"><span class="card-title">Invoice summary</span><span class="chip" id="rpt-inv-total"></span></div>
@@ -556,6 +660,27 @@ pre.code-block{background:var(--navy);color:#c8ffb0;border-radius:8px;padding:14
           <div class="card-header"><span class="card-title">Exceptions &amp; cancellations</span></div>
           <div class="tbl-wrap" id="rpt-exceptions-tbl"></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTORIAL MODAL -->
+  <div id="tutorial-overlay" style="display:none">
+    <div class="tut-modal">
+      <div class="tut-header">
+        <div>
+          <div class="tut-title">Welcome to Ledgr</div>
+          <div class="tut-subtitle" id="tut-subtitle">Power Leasing portal guide</div>
+        </div>
+        <button class="tut-close" onclick="closeTutorial()" title="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="tut-tabs" id="tut-tabs"></div>
+      <div class="tut-body" id="tut-body"></div>
+      <div class="tut-footer">
+        <span class="tut-footer-note">You can reopen this guide anytime from the ⚙ settings menu.</span>
+        <button class="btn btn-green" onclick="closeTutorial()">Got it</button>
       </div>
     </div>
   </div>
@@ -625,7 +750,7 @@ function initSheets(ss) {
     Leases: ['id','propertyId','repId','applicant','apt','rent','promo','promoType','promoValue','leaseTerm','effectiveTerm','miDate','status','invoiced','advancePaid','advancePaidDate','commBalPaid','commBalPaidDate','invoiceNum','invoiceAmt','splitRepId','splitPct','clawback','notes','dateLeased'],
     Overrides: ['id','repId','propertyId','commPct','advanceAmt','minCommission'],
     CommLedger: ['id','leaseId','repId','type','amount','date','note'],
-    InvLedger: ['id','leaseId','propertyId','type','amount','date','invoiceNum','status','note']
+    InvLedger: ['id','leaseId','propertyId','type','amount','periodStart','periodEnd','date','invoiceNum','status','note']
   };
   TABS.forEach(t => {
     let sheet = ss.getSheetByName(t);
@@ -747,7 +872,8 @@ let DB = {
   properties: [],
   reps: [],
   leases: [],
-  overrides: []
+  overrides: [],
+  invLedger: []
 };
 // ── COMMISSION ENGINE ─────────────────────────────────────────────────────────
 function calcInvoice(lease) {
@@ -853,6 +979,8 @@ async function loadFromDB() {
   DB.reps = await dbRead('Reps');
   DB.leases = await dbRead('Leases');
   DB.overrides = await dbRead('Overrides');
+  DB.invLedger = await dbRead('InvLedger');
+  if (!DB.invLedger) DB.invLedger = [];
 }
 
 function updateDbStatusBadges() {
@@ -905,14 +1033,23 @@ function setRole(role) {
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function statusBadge(s) {
-  const m = {approved:'b-green approved', moved_in:'b-blue moved in', pending:'b-amber pending', cancelled:'b-red cancelled'};
+  const m = {approved:'b-green approved', moved_in:'b-blue moved in', pending:'b-amber pending', cancelled:'b-red cancelled', complete:'b-complete complete'};
   const [cls,label] = (m[s]||'b-gray '+s).split(' ');
   return `<span class="badge ${cls}">${label||s}</span>`;
 }
 
 // Inline editable status dropdown — admin only
+function isComplete(l) {
+  // A lease is "complete" when moved in, invoiced, and commission fully paid
+  return l.status === 'moved_in' && l.invoiced && l.commBalPaidDate;
+}
+
 function statusSelect(leaseId, s) {
-  // Reps can update status on their own leases; admins can update any
+  const l = DB.leases.find(x=>x.id===leaseId);
+  // Show complete badge (read-only) when fully wrapped up
+  if (l && isComplete(l)) {
+    return `<span class="badge b-complete" title="Moved in, invoiced, and commission paid">complete</span>`;
+  }
   if (currentRole === 'rep' || currentRole === 'admin') {
     const opts = ['pending','approved','moved_in','cancelled'];
     const labels = {pending:'Pending',approved:'Approved',moved_in:'Moved in',cancelled:'Cancelled'};
@@ -1079,6 +1216,350 @@ function commTooltip(l) {
   return `<span class="comm-tip">${amt}<span class="tip-box">${lines.join('<br>')}</span></span>`;
 }
 
+// ── TUTORIAL ──────────────────────────────────────────────────────────────────
+
+const TUTORIAL_CONTENT = {
+
+  rep: [
+    {
+      id: 'dashboard', label: '📊 Dashboard', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📊</span>Your dashboard at a glance</div>
+        <p class="tut-p">When you log in, your dashboard shows a live snapshot of your activity. The four stat cards across the top tell you:</p>
+        <dl class="tut-kv">
+          <dt>My active leases</dt><dd>All your leases that aren't cancelled, with a count of how many are still pending approval.</dd>
+          <dt>Move-ins</dt><dd>How many of your leases have reached moved-in status.</dd>
+          <dt>Commissions earned</dt><dd>Total advance and balance payments that have been paid to you so far.</dd>
+          <dt>Commission balance due</dt><dd>What's still owed to you on approved leases waiting for move-in.</dd>
+        </dl>
+        <p class="tut-p">Below the tiles, <strong>Recent leases</strong> shows your six most recently signed leases, and <strong>Pending commissions</strong> lists approved leases where your balance payment hasn't been issued yet.</p>
+      </div>`
+    },
+    {
+      id: 'leases', label: '📋 My Leases', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📋</span>Adding a new lease</div>
+        <p class="tut-p">Click <strong>+ New lease</strong> to record a lease as soon as it's signed. These fields are required — the form won't save without them:</p>
+        <ul class="tut-steps">
+          <li data-n="1"><strong>Primary applicant full name</strong> — first and last name, both required.</li>
+          <li data-n="2"><strong>Apartment / unit #</strong> — the exact unit number.</li>
+          <li data-n="3"><strong>Monthly rent</strong> — the face rent amount.</li>
+          <li data-n="4"><strong>Promo / special</strong> — enter the concession (e.g. "6 weeks free") or type "none" if there isn't one.</li>
+          <li data-n="5"><strong>Lease term</strong> — total months on the lease.</li>
+          <li data-n="6"><strong>Effective term</strong> — lease term minus any free-rent months. This drives your commission calculation.</li>
+          <li data-n="7"><strong>Scheduled move-in date</strong> — the date on the lease agreement.</li>
+          <li data-n="8"><strong>Floor plan</strong> — Studio, 1 Bedroom, 2 Bedroom, 3 Bedroom, Townhome, or Other.</li>
+        </ul>
+        <div class="tut-note">The optional fields — visit type, marketing source, and current living situation — help management track trends. Fill them in when you can.</div>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">🔄</span>Updating lease status</div>
+        <p class="tut-p">Use the status dropdown in the leases table to move a lease forward as it progresses:</p>
+        <dl class="tut-kv">
+          <dt>Pending</dt><dd>Lease is signed but application hasn't been approved yet. Enter it here.</dd>
+          <dt>Approved</dt><dd>Application approved. Your advance commission is triggered at this point.</dd>
+          <dt>Moved in</dt><dd>Tenant has moved in. Your balance commission becomes due.</dd>
+          <dt>Cancelled</dt><dd>Lease fell through. You'll be asked to select a cancellation reason.</dd>
+        </dl>
+        <p class="tut-p">Once a lease is moved in, invoiced by admin, and your commission is fully paid, the row will turn gray and show <strong>complete</strong> — nothing more needed from you on that one.</p>
+      </div>`
+    },
+    {
+      id: 'commissions', label: '💰 My Commissions', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">💰</span>How your commissions work</div>
+        <p class="tut-p">Your commission on each lease has two parts:</p>
+        <dl class="tut-kv">
+          <dt>Advance</dt><dd>A flat dollar amount paid when the application is approved, before the tenant moves in.</dd>
+          <dt>Balance</dt><dd>The remainder of your total commission, paid once the tenant has moved in.</dd>
+        </dl>
+        <p class="tut-p">Your total commission is calculated as: <strong>monthly rent × effective term × your commission rate</strong>. The advance is subtracted from that total, and the balance is what's left.</p>
+        <div class="tut-note">If your commission rate is set to show you the calculation breakdown, hover over the balance amount in the commissions table to see the full math for any lease.</div>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📖</span>Reading the commission ledger</div>
+        <p class="tut-p">Go to <strong>My Commissions</strong> in the sidebar to see every lease and its commission status:</p>
+        <dl class="tut-kv">
+          <dt>Pending</dt><dd>Lease is signed but not yet approved — no payment due yet.</dd>
+          <dt>Balance due</dt><dd>Advance was paid, waiting for move-in to trigger the balance.</dd>
+          <dt>Paid</dt><dd>Both advance and balance have been paid.</dd>
+          <dt>Voided</dt><dd>Lease was cancelled — commission is void.</dd>
+        </dl>
+      </div>`
+    },
+    {
+      id: 'reports', label: '📈 My Activity', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📈</span>Your activity report</div>
+        <p class="tut-p">The <strong>My Activity</strong> page shows your personal performance metrics for any date range you choose. The four tiles at the top show:</p>
+        <dl class="tut-kv">
+          <dt>Leases signed</dt><dd>Total leases you signed in the period, with move-in count underneath.</dd>
+          <dt>B-back rate</dt><dd>Percentage of your leases where the applicant came back after an initial showing.</dd>
+          <dt>Move-in rate</dt><dd>Percentage of your approved leases that made it to move-in.</dd>
+          <dt>Cancellation rate</dt><dd>Percentage of your signed leases that were cancelled.</dd>
+        </dl>
+        <p class="tut-p">Below the tiles you can see your visit type breakdown, floor plan mix, and your commission earnings for the period. You can only see your own data here.</p>
+        <div class="tut-note">Use the date range buttons — This month, Last month, This quarter — to quickly pull a period summary.</div>
+      </div>`
+    },
+    {
+      id: 'workflow', label: '✅ Daily workflow', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">✅</span>Day-to-day: what to do and when</div>
+        <ul class="tut-steps">
+          <li data-n="1"><strong>Lease signed</strong> — Add a new lease immediately. Set status to Pending. Fill in all required fields including effective term and floor plan.</li>
+          <li data-n="2"><strong>Application approved</strong> — Change status to Approved. Your advance commission is now on record and will be paid out.</li>
+          <li data-n="3"><strong>Tenant moves in</strong> — Change status to Moved in on move-in day. Your balance commission is now due.</li>
+          <li data-n="4"><strong>Lease cancelled</strong> — Change status to Cancelled and select the reason. This keeps the reporting accurate for the whole team.</li>
+        </ul>
+        <div class="tut-note">Keep statuses current — your commission calculations and the team's reporting both depend on accurate status data.</div>
+        <div class="tut-warn">Don't skip the effective term field. If you enter 12 months lease term but there's 6 weeks free rent, the effective term should be about 10.5 months. Getting this right ensures your commission is calculated correctly.</div>
+      </div>`
+    },
+  ],
+
+  manager: [
+    {
+      id: 'dashboard', label: '📊 Dashboard', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📊</span>Team dashboard</div>
+        <p class="tut-p">Your dashboard shows a live overview of the entire team's activity. The stat cards show totals across all reps: active leases, move-ins, total invoiced, and commissions paid. Recent leases and pending commissions also show all reps.</p>
+      </div>`
+    },
+    {
+      id: 'leases', label: '📋 Leases', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📋</span>Viewing all leases</div>
+        <p class="tut-p">The Leases page shows every lease across all reps and properties. You can filter by status and by property using the dropdowns at the top right. Use the search box to find a specific applicant or unit.</p>
+        <p class="tut-p">The table shows the applicant, property, unit, rent, lease term, effective term, invoice amount, move-in date, status, rep, advance paid, and commission balance. You can see all financial details that reps cannot.</p>
+        <div class="tut-note">You can edit lease details by clicking Edit on any row, but status changes are managed by the rep or admin.</div>
+      </div>`
+    },
+    {
+      id: 'commissions', label: '💰 Commissions', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">💰</span>Commission ledger</div>
+        <p class="tut-p">The Commission Rules page gives you a full view of all commission activity across the team. Filter by rep to drill into one person. The status column shows where each lease stands:</p>
+        <dl class="tut-kv">
+          <dt>Pending</dt><dd>Lease signed, not yet approved — no commission due.</dd>
+          <dt>Balance due</dt><dd>Advance paid, move-in not yet happened or balance not yet paid.</dd>
+          <dt>Paid</dt><dd>Fully settled.</dd>
+          <dt>Voided</dt><dd>Cancelled lease.</dd>
+        </dl>
+        <p class="tut-p">The Rules & Overrides tab shows each rep's default commission rate, advance amount, and any property-specific overrides.</p>
+      </div>`
+    },
+    {
+      id: 'reports', label: '📈 Reports', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📈</span>Reports overview</div>
+        <p class="tut-p">The Reports page gives you full access to team-wide KPIs, filterable by date range, rep, and property. The four summary tiles show leases signed, B-back rate, move-in rate, and cancellation rate for the period.</p>
+        <p class="tut-p">Below the tiles you'll find visual breakdowns for visit types, floor plan mix, cancellation reasons, and marketing sources — all shown as bar charts. Hover over a bar or number to see exact counts.</p>
+        <p class="tut-p">The <strong>Rep performance</strong> table ranks reps by lease volume for the period, including move-in count, B-back rate, and commissions earned. Use this to spot patterns and coach individual reps.</p>
+        <div class="tut-note">Use the quick date buttons — This month, Last month, This quarter — to set a standard period. The rep and property filters narrow the data to a specific person or site.</div>
+      </div>`
+    },
+  ],
+
+  admin: [
+    {
+      id: 'dashboard', label: '📊 Dashboard', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📊</span>Admin dashboard</div>
+        <p class="tut-p">Your dashboard shows the full team picture: active leases, move-ins, total invoiced, and commissions paid. Below the standard cards, two additional charts are visible only to admins:</p>
+        <dl class="tut-kv">
+          <dt>Top properties — revenue</dt><dd>The five highest-grossing properties by total invoice revenue, all time. Bar length is relative; the margin % label shows net margin after commissions and salary allocation.</dd>
+          <dt>Top reps — commissions earned</dt><dd>The five reps who generated the most lease revenue, all time, with their move-in conversion rate.</dd>
+        </dl>
+      </div>`
+    },
+    {
+      id: 'leases', label: '📋 Leases', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📋</span>Managing leases</div>
+        <p class="tut-p">As admin you have full control over every lease. You can add, edit, and change the status of any lease regardless of which rep entered it.</p>
+        <p class="tut-p"><strong>Adding a lease:</strong> Click + New lease. The required fields are applicant full name, unit, rent, promo (enter "none" if none), lease term, effective term, scheduled move-in date, and floor plan. Optional fields (visit type, marketing source, current living situation) feed the reporting charts.</p>
+        <p class="tut-p"><strong>Editing:</strong> Click Edit on any row to open the full edit modal. You can change any field including property, rep assignment, split commissions, and notes.</p>
+        <p class="tut-p"><strong>Status dropdown:</strong> The status column in the table is a live dropdown — change it directly in the row without opening the modal. Changing to Cancelled will prompt for a cancellation reason.</p>
+        <div class="tut-note">A lease row turns gray and shows "complete" when it is moved in, invoiced, and commission fully paid. This is automatic — no manual step needed.</div>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">🔄</span>Cancellation workflow</div>
+        <p class="tut-p">When you set a lease to Cancelled, a modal prompts for the reason (credit score, changed mind, found another unit, etc.) and whether a clawback applies. If clawback is checked, the advance is reversed. Cancellation reasons are tracked in the reports cancellation breakdown.</p>
+      </div>`
+    },
+    {
+      id: 'properties', label: '🏢 Properties', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">🏢</span>Managing properties</div>
+        <p class="tut-p">The Properties page is the configuration layer for billing. Each property stores:</p>
+        <dl class="tut-kv">
+          <dt>Invoice rate</dt><dd>The % of rent × effective term charged to the property owner on each lease. This drives the invoice amount.</dd>
+          <dt>Renewal rate</dt><dd>Lower rate applied to renewal leases where applicable.</dd>
+          <dt>Weekly fee</dt><dd>The flat retainer fee charged weekly (or daily for daily-rate properties). This is a revenue item — it appears on the Retainer Invoices tab.</dd>
+          <dt>Contract start / end</dt><dd>Used to prorate retainer revenue in the profitability report.</dd>
+          <dt>Assigned rep</dt><dd>The primary rep working this property.</dd>
+        </dl>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">⚙️</span>Commission overrides</div>
+        <p class="tut-p">If a rep has a different commission rate or advance amount at a specific property (e.g. a higher rate for a premium client), click <strong>Add override</strong> on that property's row. The override takes precedence over the rep's default rate for leases at that property only.</p>
+      </div>`
+    },
+    {
+      id: 'reps', label: '👥 Reps & Users', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">👥</span>Managing reps and access</div>
+        <p class="tut-p">The Reps & Users page controls who can log in and what they can do. Each rep record has:</p>
+        <dl class="tut-kv">
+          <dt>Commission %</dt><dd>The rep's default rate applied to rent × effective term to calculate their total commission.</dd>
+          <dt>Advance amount</dt><dd>Flat dollar amount paid on approval before move-in.</dd>
+          <dt>Role</dt><dd>Rep (own data only), Manager (all leases, no admin), or Admin (full access).</dd>
+          <dt>Employment type</dt><dd>FT, PT, Contractor, or Mgmt. Salary allocation in the profitability report uses FT and PT reps only — Mgmt is excluded.</dd>
+          <dt>Base salary</dt><dd>Annual base wage, prorated and allocated across properties by revenue share in the profitability report.</dd>
+        </dl>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">🔐</span>Permissions</div>
+        <p class="tut-p">The <strong>Show commission calculation breakdown</strong> checkbox controls whether a rep can see the full math behind their commission balance when they hover over it. Off by default — turn it on for reps who want full transparency into their earnings calculation.</p>
+      </div>`
+    },
+    {
+      id: 'commissions', label: '💰 Commissions', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📖</span>Commission ledger</div>
+        <p class="tut-p">The Commission ledger tab shows every lease and its payment status. The status dropdown on each row lets you mark a commission balance as paid or unpaid directly. Hover over the balance amount to see the full calculation breakdown for any lease.</p>
+        <div class="tut-note">The advance and balance are calculated independently: Total commission = rent × effective term × rep rate. Advance is paid first; balance is paid after move-in. Marking one paid does not affect the other.</div>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">💼</span>Rules & Overrides tab</div>
+        <p class="tut-p">Shows each rep's default commission configuration and any property-level overrides. Add overrides here or from the Properties page. Overrides apply to all new leases at that property for that rep — existing leases are not retroactively changed.</p>
+      </div>`
+    },
+    {
+      id: 'payroll', label: '💸 Payroll report', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">💸</span>Running a payroll report</div>
+        <p class="tut-p">The <strong>Payroll report</strong> tab (Commission Rules → Payroll report) is how you assemble a commission payment run. Here's how to use it:</p>
+        <ul class="tut-steps">
+          <li data-n="1">Set the date range to your pay period using the quick buttons or the date fields. Use <strong>All unpaid</strong> to see everything outstanding regardless of date.</li>
+          <li data-n="2">The four summary tiles show total payable, advances due, balances due, and number of reps to pay for the period.</li>
+          <li data-n="3">Below that, each rep gets a card listing every item owed — amber <strong>advance</strong> badges for approval-triggered payments, blue <strong>balance</strong> badges for move-in-triggered payments.</li>
+          <li data-n="4">Each line shows the applicant, property, date, the calculation breakdown, and the amount. Click <strong>Mark paid</strong> on individual lines or <strong>Mark all paid</strong> to settle the entire rep at once.</li>
+          <li data-n="5">Once marked paid, items drop off the report for that period. They won't appear again.</li>
+          <li data-n="6">Click <strong>Export CSV</strong> to download the full payroll run for your records or payroll system.</li>
+        </ul>
+        <div class="tut-warn">Advances are triggered by Approved status. Balances are triggered by Moved in status. Make sure reps keep statuses current — items only appear in the payroll report when the status is correct.</div>
+      </div>`
+    },
+    {
+      id: 'invoices', label: '🧾 Invoices', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📄</span>Lease invoices</div>
+        <p class="tut-p">The Invoices page has two tabs. <strong>Lease invoices</strong> shows all lease-based billing. The default view shows only moved-in leases — the ones ready to bill. Use the filter dropdown to switch views:</p>
+        <dl class="tut-kv">
+          <dt>Moved in (default)</dt><dd>Billable leases only. This is your working view for billing.</dd>
+          <dt>Not yet invoiced</dt><dd>Moved-in leases that still need an invoice sent.</dd>
+          <dt>Invoiced</dt><dd>Already billed. Review or find a specific invoice number.</dd>
+          <dt>Pipeline</dt><dd>Approved/pending leases with projected amounts — not billable yet, shown at reduced opacity.</dd>
+        </dl>
+        <p class="tut-p">To mark a lease invoiced: find it in the table, change the dropdown from "Not invoiced" to "Invoiced." A modal will prompt for the invoice number — this is required. To correct a number after the fact, click the underlined invoice number in the table.</p>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">🗓️</span>Retainer invoices — billing workflow</div>
+        <p class="tut-p">The <strong>Retainer invoices</strong> tab is where you bill the weekly/daily retainer fees. Here's the full billing workflow for a period:</p>
+        <ul class="tut-steps">
+          <li data-n="1">Click <strong>+ Generate retainer invoices</strong>. Set the period start and end dates.</li>
+          <li data-n="2">A checklist shows all active properties with their prorated fee amount for the period. Amounts clip to each property's contract dates automatically.</li>
+          <li data-n="3">Check the properties to include and click Generate. One retainer line is created per property.</li>
+          <li data-n="4">For each retainer line, click <strong>Mark invoiced</strong> and enter the invoice number from your billing system.</li>
+          <li data-n="5">To correct an invoice number, click the underlined number — a warning dialog will confirm you're editing an already-invoiced record.</li>
+        </ul>
+        <div class="tut-note">Retainer revenue appears in the property profitability report. Once retainer invoices are logged, the report uses those actual amounts instead of estimates.</div>
+      </div>`
+    },
+    {
+      id: 'reports', label: '📈 Reports', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">📈</span>KPI reports</div>
+        <p class="tut-p">The Reports page is filterable by date range, rep, and property. The top section shows team-wide KPIs (leases signed, B-back rate, move-in rate, cancellation rate) followed by bar chart breakdowns for visit types, floor plans, cancellation reasons, and marketing sources.</p>
+        <p class="tut-p">The rep performance table ranks reps by lease volume, move-ins, B-back rate, and commissions earned for the period.</p>
+      </div>
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">💹</span>Property profitability</div>
+        <p class="tut-p">The <strong>Property profitability</strong> table at the top of the admin section shows a complete P&L by property for the selected period:</p>
+        <dl class="tut-kv">
+          <dt>Lease revenue</dt><dd>Sum of all lease invoice amounts for moved-in leases in the period.</dd>
+          <dt>Retainer revenue</dt><dd>Retainer fees for the period — uses actual InvLedger entries if available, otherwise estimates from the fee rate and contract dates.</dd>
+          <dt>Comm paid</dt><dd>Advance and balance commissions actually paid out to reps.</dd>
+          <dt>Salary alloc.</dt><dd>Each rep's annual base salary prorated to the period, then split across properties in proportion to the revenue they generated at each property. Hover over the column header for a tooltip.</dd>
+          <dt>Net margin</dt><dd>Total revenue minus commissions minus allocated salary.</dd>
+          <dt>Margin %</dt><dd>Net margin as a percentage of total revenue. Green = profitable, red = not.</dd>
+        </dl>
+        <div class="tut-note">The profitability numbers get more accurate over time as you log retainer invoices and mark commissions paid. In the early days, retainer revenue is estimated from contract rates.</div>
+      </div>`
+    },
+    {
+      id: 'settings', label: '⚙️ Settings', html: `
+      <div class="tut-section">
+        <div class="tut-section-title"><span class="tut-icon">⚙️</span>Settings & database connection</div>
+        <p class="tut-p">Click the gear icon (⚙) next to your name in the bottom-left sidebar to open settings. As admin you have two options:</p>
+        <dl class="tut-kv">
+          <dt>Database connection</dt><dd>Connect the app to your Google Sheet backend. Paste in the Apps Script URL from the Setup page. Once connected, all data reads and writes go to the Sheet in real time. The status indicator in the top right of each page shows Live or Not connected.</dd>
+          <dt>Sign out</dt><dd>Signs you out and returns to the login screen.</dd>
+        </dl>
+        <div class="tut-note">The database connection only needs to be set up once per browser. It's stored locally and persists across sessions. If you switch browsers or devices, you'll need to re-enter the URL.</div>
+      </div>`
+    },
+  ],
+};
+
+function getTutorialSections(role) {
+  if (role === 'admin') return TUTORIAL_CONTENT.admin;
+  if (role === 'manager') return [...TUTORIAL_CONTENT.manager];
+  return TUTORIAL_CONTENT.rep;
+}
+
+function openTutorial() {
+  const sections = getTutorialSections(currentRole);
+  const roleLabel = currentRole === 'admin' ? 'Admin guide' : currentRole === 'manager' ? 'Manager guide' : 'Rep guide';
+  document.getElementById('tut-subtitle').textContent = `Power Leasing portal — ${roleLabel}`;
+
+  // Build tabs
+  document.getElementById('tut-tabs').innerHTML = sections.map((s,i) =>
+    `<button class="tut-tab ${i===0?'active':''}" onclick="showTutSection(${i})" id="tut-tab-${i}">${s.label}</button>`
+  ).join('');
+
+  // Show first section
+  showTutSection(0);
+  document.getElementById('tutorial-overlay').style.display = 'flex';
+  toggleSettings();  // close settings flyout if open
+}
+
+function showTutSection(idx) {
+  const sections = getTutorialSections(currentRole);
+  document.getElementById('tut-body').innerHTML = sections[idx].html;
+  document.querySelectorAll('.tut-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.getElementById('tut-body').scrollTop = 0;
+}
+
+function closeTutorial() {
+  document.getElementById('tutorial-overlay').style.display = 'none';
+  // Mark as seen for this user+role
+  if (currentUser) {
+    const key = `ledgr_tutorial_seen_${currentUser.email||currentUser.name}_${currentRole}`;
+    localStorage.setItem(key, '1');
+  }
+}
+
+function maybeShowTutorial() {
+  if (!currentUser) return;
+  const key = `ledgr_tutorial_seen_${currentUser.email||currentUser.name}_${currentRole}`;
+  if (!localStorage.getItem(key)) {
+    setTimeout(openTutorial, 600);  // slight delay so dashboard renders first
+  }
+}
+
 function toggleSettings() {
   const f = document.getElementById('settings-flyout');
   const btn = document.getElementById('settings-btn');
@@ -1132,8 +1613,6 @@ function renderDashboard() {
   const totalComm = vl.reduce((s,l)=>s+(+l.advancePaid||0)+(+l.commBalPaid||0),0);
   const pendingComm = vl.filter(l=>l.status==='approved'&&!l.commBalPaidDate).reduce((s,l)=>s+calcComm(l).balance,0);
 
-  // Reps see: leases, move-ins, their commissions earned, commissions pending
-  // Admins/managers also see: total invoiced
   const isRep = currentRole === 'rep';
   document.getElementById('stat-grid').innerHTML = `
     <div class="stat-card"><div class="stat-label">${isRep?'My active leases':'Active leases'}</div><div class="stat-value">${active}</div><div class="stat-sub">${vl.filter(l=>l.status==='pending').length} pending approval</div></div>
@@ -1156,6 +1635,193 @@ function renderDashboard() {
        ${pc.map(l=>`<tr><td>${l.applicant}</td><td style="color:var(--text2)">${currentRole!=='rep'?repName(l.repId):'--'}</td><td style="font-family:var(--mono)">${fmt$(calcComm(l).balance)}</td></tr>`).join('')}
        </tbody></table>`
     : '<div class="empty" style="padding:24px">No pending commissions</div>';
+
+  // Admin-only profitability charts
+  const profitSection = document.getElementById('dash-profit-section');
+  if (profitSection) profitSection.style.display = currentRole==='admin' ? '' : 'none';
+  if (currentRole === 'admin') renderDashboardProfit();
+}
+
+// ── PROFITABILITY ENGINE ───────────────────────────────────────────────────────
+// ── PROFITABILITY ENGINE ──────────────────────────────────────────────────────
+// Revenue = lease invoices + retainer fees charged to property
+// Cost    = rep commissions paid out (advance + balance)
+// Margin  = Revenue − Commissions
+
+function calcRetainerRevenue(prop, fromDate, toDate) {
+  // Calculate retainer revenue for a property over a date range
+  // Uses the overlap between [fromDate,toDate] and [contractStart,contractEnd]
+  if (!prop.weeklyFee || !prop.contractStart) return 0;
+  const msPerDay = 86400000;
+  const cStart = new Date(prop.contractStart);
+  const cEnd   = prop.contractEnd ? new Date(prop.contractEnd) : new Date();
+  const rFrom  = fromDate ? new Date(fromDate) : cStart;
+  const rTo    = toDate   ? new Date(toDate)   : cEnd;
+  const overlapStart = new Date(Math.max(cStart, rFrom));
+  const overlapEnd   = new Date(Math.min(cEnd,   rTo));
+  if (overlapEnd <= overlapStart) return 0;
+  const days = (overlapEnd - overlapStart) / msPerDay;
+  return prop.weeklyFeeType === 'daily'
+    ? prop.weeklyFee * days
+    : prop.weeklyFee * (days / 7);
+}
+
+function calcProfitability(fromDate, toDate) {
+  const inRange = d => (!fromDate&&!toDate)||((!fromDate||d>=fromDate)&&(!toDate||d<=toDate));
+
+  const byProp = {};
+  DB.properties.forEach(p => {
+    byProp[p.id] = {
+      prop: p,
+      leaseRevenue: 0,
+      retainerRevenue: 0,
+      commCost: 0,        // commissions actually paid to reps
+      salaryCost: 0,      // prorated base salary allocated by revenue share
+      leaseCount: 0,
+    };
+  });
+
+  // Lease revenue and commission costs
+  DB.leases.filter(l=>l.status==='moved_in'&&l.miDate&&inRange(l.miDate)).forEach(l => {
+    const row = byProp[l.propertyId];
+    if (!row) return;
+    row.leaseRevenue += calcInvoice(l);
+    row.commCost += (+(l.advancePaid||0)) + (+(l.commBalPaid||0));
+    row.leaseCount++;
+  });
+
+  // Retainer revenue
+  DB.properties.forEach(p => {
+    if (!byProp[p.id]) return;
+    const actual = (DB.invLedger||[]).filter(e =>
+      e.type==='retainer' && e.propertyId===p.id &&
+      inRange(e.date||e.periodStart||'')
+    );
+    byProp[p.id].retainerRevenue = actual.length
+      ? actual.reduce((s,e)=>s+(+e.amount||0),0)
+      : calcRetainerRevenue(p, fromDate, toDate);
+  });
+
+  // ── Salary allocation ────────────────────────────────────────────────────
+  // For each rep (role=rep, empType != Mgmt), prorate their annual salary
+  // to the period, then split that cost across properties by % of revenue
+  // the rep generated at each property in the period.
+
+  const msPerDay = 86400000;
+  let periodDays;
+  if (fromDate && toDate) {
+    periodDays = Math.max(1, (new Date(toDate) - new Date(fromDate)) / msPerDay + 1);
+  } else {
+    // All time — use 365 as base (annual salary = full year)
+    periodDays = 365;
+  }
+
+  DB.reps.filter(r => r.role==='rep' && r.empType!=='Mgmt' && r.baseSalary>0).forEach(rep => {
+    // Prorate salary to period
+    const periodSalary = (rep.baseSalary / 365) * periodDays;
+
+    // Find all moved-in lease revenue this rep generated per property in period
+    const repLeases = DB.leases.filter(l =>
+      l.repId === rep.id && l.status==='moved_in' && l.miDate && inRange(l.miDate)
+    );
+    const repRevByProp = {};
+    let repTotalRev = 0;
+    repLeases.forEach(l => {
+      const inv = calcInvoice(l);
+      repRevByProp[l.propertyId] = (repRevByProp[l.propertyId]||0) + inv;
+      repTotalRev += inv;
+    });
+
+    if (repTotalRev <= 0) {
+      // Rep had no revenue this period — still allocate salary cost to their
+      // primary assigned property (the property where they are set as repId)
+      const assignedProp = DB.properties.find(p=>p.repId===rep.id);
+      if (assignedProp && byProp[assignedProp.id]) {
+        byProp[assignedProp.id].salaryCost += periodSalary;
+      }
+      return;
+    }
+
+    // Allocate salary proportionally by revenue share per property
+    Object.entries(repRevByProp).forEach(([propId, rev]) => {
+      const share = rev / repTotalRev;
+      if (byProp[propId]) byProp[propId].salaryCost += periodSalary * share;
+    });
+  });
+
+  return Object.values(byProp)
+    .map(r => {
+      const revenue = r.leaseRevenue + r.retainerRevenue;
+      const totalCost = r.commCost + r.salaryCost;
+      const margin = revenue - totalCost;
+      return {
+        ...r,
+        revenue,
+        totalCost,
+        margin,
+        roi: revenue > 0 ? margin / revenue : 0,
+      };
+    })
+    .filter(r => r.revenue > 0)
+    .sort((a,b) => b.revenue - a.revenue);
+}
+
+function calcRepProfitability(fromDate, toDate) {
+  const inRange = d => (!fromDate&&!toDate)||((!fromDate||d>=fromDate)&&(!toDate||d<=toDate));
+  const byRep = {};
+  DB.reps.filter(r=>r.role==='rep').forEach(r => {
+    byRep[r.id] = {rep:r, revenue:0, commEarned:0, leases:0, movedIn:0};
+  });
+  DB.leases.filter(l=>l.status!=='cancelled'&&l.dateLeased&&inRange(l.dateLeased)).forEach(l => {
+    const row = byRep[l.repId];
+    if (!row) return;
+    row.leases++;
+    if (l.status==='moved_in') {
+      row.revenue += calcInvoice(l);
+      row.commEarned += (+(l.advancePaid||0))+(+(l.commBalPaid||0));
+      row.movedIn++;
+    }
+  });
+  return Object.values(byRep).filter(r=>r.leases>0).sort((a,b)=>b.revenue-a.revenue);
+}
+
+function renderDashboardProfit() {
+  const data = calcProfitability('','');
+  const repData = calcRepProfitability('','');
+  const maxRev = Math.max(...data.map(d=>d.revenue), 1);
+  const maxRepRev = Math.max(...repData.map(d=>d.revenue), 1);
+
+  // Top 5 properties by revenue with bar chart
+  document.getElementById('dash-top-props').innerHTML = data.slice(0,5).map(r => {
+    const barW = Math.round(r.revenue/maxRev*100);
+    const marginColor = r.margin>=0 ? 'var(--green)' : '#e05555';
+    return `<div style="padding:8px 14px;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:500;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.prop.name}</span>
+        <div style="text-align:right">
+          <span style="font-family:var(--mono);font-size:12px">${fmt$(r.revenue)}</span>
+          <span style="font-size:10px;color:${marginColor};margin-left:6px">${r.roi>=0?'+':''}${Math.round(r.roi*100)}% margin</span>
+        </div>
+      </div>
+      <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${barW}%;background:${r.margin>=0?'var(--green)':'#e05555'}"></div></div>
+    </div>`;
+  }).join('') || '<div class="empty">No revenue data</div>';
+
+  // Top 5 reps by revenue generated
+  document.getElementById('dash-top-reps').innerHTML = repData.slice(0,5).map(r => {
+    const barW = Math.round(r.revenue/maxRepRev*100);
+    const convRate = r.leases>0 ? Math.round(r.movedIn/r.leases*100) : 0;
+    return `<div style="padding:8px 14px;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:500">${r.rep.name}</span>
+        <div style="text-align:right">
+          <span style="font-family:var(--mono);font-size:12px">${fmt$(r.revenue)}</span>
+          <span style="font-size:10px;color:var(--text3);margin-left:6px">${convRate}% conv.</span>
+        </div>
+      </div>
+      <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${barW}%;background:#90b0ff"></div></div>
+    </div>`;
+  }).join('') || '<div class="empty">No rep revenue data</div>';
 }
 
 // ── LEASES ────────────────────────────────────────────────────────────────────
@@ -1203,7 +1869,8 @@ function filterLeases() {
       const comm=calcComm(l);
       const inv=calcInvoice(l);
       const balDue=l.commBalPaidDate?l.commBalPaid:comm.balance;
-      return `<tr>
+      const complete = isComplete(l);
+      return `<tr class="${complete?'lease-complete':''}">
         <td style="font-weight:500;white-space:nowrap">${l.applicant}</td>
         <td style="color:var(--text2)">${propName(l.propertyId)}</td>
         <td style="font-family:var(--mono)">${l.apt}</td>
@@ -1215,7 +1882,7 @@ function filterLeases() {
         <td>${statusSelect(l.id, l.status)}</td>
         ${!isRep?`<td>${repName(l.repId)}</td>`:''}
         <td style="font-family:var(--mono)">${fmt$(l.advancePaid||0)} ${l.advancePaidDate?'<span class="dot dot-g"></span>':''}</td>
-        <td>${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':commTooltip(l)}</td>
+        <td>${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':complete?`<span style="font-size:11px;color:rgba(255,255,255,0.35)">Paid in full${l.commBalPaidDate?' · '+l.commBalPaidDate:''}</span>`:commTooltip(l)}</td>
         ${!isRep?`<td>${invoiceSelect(l.id, l.invoiced)}</td>`:''}
         <td><div class="actions">
           <button class="btn btn-ghost btn-xs" onclick="openLeaseModal('${l.id}')">Edit</button>
@@ -1292,26 +1959,31 @@ function renderReps() {
 
 // ── COMMISSION RULES ──────────────────────────────────────────────────────────
 function commTab(tab, el) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#pg-comm-rules .tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('comm-ledger-view').style.display=tab==='ledger'?'':'none';
+  document.getElementById('comm-payroll-view').style.display=tab==='payroll'?'':'none';
   document.getElementById('comm-rules-view').style.display=tab==='rules'?'':'none';
   commActiveTab=tab;
   if (tab==='rules') renderCommRulesView();
+  if (tab==='payroll') initPayroll();
 }
 
 function renderCommRules() {
   const isRep = currentRole === 'rep';
 
-  // Update page title and subtitle based on role
   const titleEl = document.getElementById('comm-rules-title');
   const subEl = document.getElementById('comm-rules-sub');
   if (titleEl) titleEl.textContent = isRep ? 'My commissions' : 'Commission rules';
   if (subEl) subEl.textContent = isRep ? 'Your commission activity and payment history' : 'Default rules per rep with property-level overrides';
 
-  // Hide Rules & Overrides tab from reps
+  // Hide payroll and rules tabs from reps
   const tabs = document.querySelectorAll('#pg-comm-rules .tab');
-  if (tabs.length > 1) tabs[1].style.display = isRep ? 'none' : '';
+  tabs.forEach(t => {
+    if (t.textContent.includes('Payroll') || t.textContent.includes('Rules')) {
+      t.style.display = isRep ? 'none' : '';
+    }
+  });
 
   const repSel=document.getElementById('comm-rep-filter');
   if (repSel) {
@@ -1345,7 +2017,7 @@ function renderCommLedger(repFilter) {
         ${!isRep?`<td style="font-family:var(--mono)">${fmt$(inv)}</td>`:''}
         <td style="font-family:var(--mono)">${fmt$(adv)}</td>
         <td style="color:var(--text2)">${l.advancePaidDate||'--'}</td>
-        <td>${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':commTooltip(l)}</td>
+        <td>${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':complete?`<span style="font-size:11px;color:rgba(255,255,255,0.35)">Paid in full${l.commBalPaidDate?' · '+l.commBalPaidDate:''}</span>`:commTooltip(l)}</td>
         <td style="color:var(--text2)">${l.commBalPaidDate||'--'}</td>
         <td>${l.status==='cancelled'?'<span class="badge b-red">voided</span>':st==='pending'?'<span class="badge b-gray">pending</span>':commPaidSelect(l.id, isPaid, l)}</td>
       </tr>`;
@@ -1354,6 +2026,260 @@ function renderCommLedger(repFilter) {
 }
 
 function filterCommLedger(v) { renderCommLedger(v); }
+
+// ── PAYROLL REPORT ────────────────────────────────────────────────────────────
+
+function initPayroll() {
+  // Populate rep filter
+  const repSel = document.getElementById('pay-rep-filter');
+  repSel.innerHTML = '<option value="">All reps</option>' + DB.reps.filter(r=>r.role==='rep').map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+  // Default to current month
+  setPayDateRange('this-month', document.querySelector('.qd'));
+}
+
+function setPayDateRange(preset, el) {
+  document.querySelectorAll('#comm-payroll-view .qd').forEach(b=>b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const now = new Date();
+  let from, to;
+  if (preset==='this-month') {
+    from=new Date(now.getFullYear(),now.getMonth(),1);
+    to=new Date(now.getFullYear(),now.getMonth()+1,0);
+  } else if (preset==='last-month') {
+    from=new Date(now.getFullYear(),now.getMonth()-1,1);
+    to=new Date(now.getFullYear(),now.getMonth(),0);
+  } else if (preset==='this-quarter') {
+    const q=Math.floor(now.getMonth()/3);
+    from=new Date(now.getFullYear(),q*3,1);
+    to=new Date(now.getFullYear(),q*3+3,0);
+  } else {
+    // All unpaid — no date restriction
+    document.getElementById('pay-from').value='';
+    document.getElementById('pay-to').value='';
+    renderPayroll();
+    return;
+  }
+  document.getElementById('pay-from').value=from.toISOString().slice(0,10);
+  document.getElementById('pay-to').value=to.toISOString().slice(0,10);
+  renderPayroll();
+}
+
+function renderPayroll() {
+  const from = document.getElementById('pay-from').value;
+  const to   = document.getElementById('pay-to').value;
+  const repF = document.getElementById('pay-rep-filter').value;
+  const inRange = d => (!from && !to) || ((!from||d>=from) && (!to||d<=to));
+
+  // Build payroll items
+  // An item is payable if:
+  //   ADVANCE: lease is approved or moved_in, advanceAmt > 0, advancePaidDate NOT set
+  //             date reference = dateLeased (when they earned it)
+  //   BALANCE: lease is moved_in, commBalPaidDate NOT set, balance > 0
+  //             date reference = miDate (when it became due)
+
+  let leases = DB.leases.filter(l=>l.status!=='cancelled');
+  if (repF) leases = leases.filter(l=>l.repId===repF);
+
+  const advances = [];
+  const balances = [];
+
+  leases.forEach(l => {
+    const comm = calcComm(l);
+    const rep  = DB.reps.find(r=>r.id===l.repId);
+    const prop = DB.properties.find(p=>p.id===l.propertyId);
+    if (!rep) return;
+
+    // Advance: due on approval, not yet paid
+    if ((l.status==='approved'||l.status==='moved_in') && !l.advancePaidDate && comm.advance > 0) {
+      const refDate = l.dateLeased||'';
+      if (inRange(refDate)) {
+        advances.push({l, rep, prop, amount: comm.advance, refDate, type:'advance'});
+      }
+    }
+
+    // Balance: due on move-in, not yet paid
+    if (l.status==='moved_in' && !l.commBalPaidDate && comm.balance > 0) {
+      const refDate = l.miDate||'';
+      if (inRange(refDate)) {
+        balances.push({l, rep, prop, amount: comm.balance, refDate, type:'balance'});
+      }
+    }
+  });
+
+  const allItems = [...advances, ...balances];
+  const totalAdv = advances.reduce((s,i)=>s+i.amount,0);
+  const totalBal = balances.reduce((s,i)=>s+i.amount,0);
+  const totalDue = totalAdv + totalBal;
+
+  // Summary tiles
+  document.getElementById('payroll-summary-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total payable</div><div class="stat-value">${fmt$(totalDue)}</div><div class="stat-sub">${allItems.length} items</div></div>
+    <div class="stat-card"><div class="stat-label">Advances due</div><div class="stat-value">${fmt$(totalAdv)}</div><div class="stat-sub">${advances.length} unpaid advances</div></div>
+    <div class="stat-card"><div class="stat-label">Balances due</div><div class="stat-value">${fmt$(totalBal)}</div><div class="stat-sub">${balances.length} move-ins unpaid</div></div>
+    <div class="stat-card"><div class="stat-label">Reps to pay</div><div class="stat-value">${new Set(allItems.map(i=>i.rep.id)).size}</div><div class="stat-sub">this period</div></div>
+  `;
+
+  if (!allItems.length) {
+    document.getElementById('payroll-rep-breakdown').innerHTML = '<div class="empty" style="padding:40px">No commissions payable in this period.</div>';
+    return;
+  }
+
+  // Group by rep
+  const byRep = {};
+  allItems.forEach(item => {
+    if (!byRep[item.rep.id]) byRep[item.rep.id] = {rep:item.rep, advances:[], balances:[]};
+    if (item.type==='advance') byRep[item.rep.id].advances.push(item);
+    else byRep[item.rep.id].balances.push(item);
+  });
+
+  const html = Object.values(byRep).sort((a,b)=>a.rep.name.localeCompare(b.rep.name)).map(({rep, advances:advs, balances:bals}) => {
+    const repAdv = advs.reduce((s,i)=>s+i.amount,0);
+    const repBal = bals.reduce((s,i)=>s+i.amount,0);
+    const repTotal = repAdv + repBal;
+
+    const advRows = advs.map(i=>`
+      <tr>
+        <td style="padding-left:14px;color:var(--text2)">
+          <span class="badge b-amber" style="font-size:10px;margin-right:6px">advance</span>
+          ${i.l.applicant}
+        </td>
+        <td style="color:var(--text3)">${i.prop?.name||''}</td>
+        <td style="color:var(--text3)">${i.refDate||'--'}</td>
+        <td style="color:var(--text3)">Lease signed — advance on approval</td>
+        <td style="font-family:var(--mono);text-align:right;font-weight:500">${fmt$(i.amount)}</td>
+        <td>${currentRole==='admin'?`<button class="btn btn-ghost btn-xs" onclick="markAdvancePaid('${i.l.id}')">Mark paid</button>`:'--'}</td>
+      </tr>`).join('');
+
+    const balRows = bals.map(i=>`
+      <tr>
+        <td style="padding-left:14px;color:var(--text2)">
+          <span class="badge b-blue" style="font-size:10px;margin-right:6px">balance</span>
+          ${i.l.applicant}
+        </td>
+        <td style="color:var(--text3)">${i.prop?.name||''}</td>
+        <td style="color:var(--text3)">${i.refDate||'--'} <span style="font-size:10px;color:var(--text3)">(move-in)</span></td>
+        <td style="color:var(--text3)">${commTooltip(i.l)}</td>
+        <td style="font-family:var(--mono);text-align:right;font-weight:500">${fmt$(i.amount)}</td>
+        <td>${currentRole==='admin'?`<button class="btn btn-ghost btn-xs" onclick="markCommPaid('${i.l.id}')">Mark paid</button>`:'--'}</td>
+      </tr>`).join('');
+
+    const markAllId = `payroll-mark-${rep.id}`;
+    return `
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-header" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0">${rep.initials}</div>
+          <div>
+            <div style="font-weight:500;font-size:14px">${rep.name}</div>
+            <div style="font-size:11px;color:var(--text3)">${advs.length} advance${advs.length!==1?'s':''} &nbsp;·&nbsp; ${bals.length} balance${bals.length!==1?'s':''}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--text3)">Total due</div>
+            <div style="font-family:var(--mono);font-size:17px;font-weight:600;color:var(--green)">${fmt$(repTotal)}</div>
+          </div>
+          ${currentRole==='admin'?`<button class="btn btn-green btn-sm" id="${markAllId}" onclick="markRepAllPaid('${rep.id}',this)">Mark all paid</button>`:''}
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table style="width:100%">
+          <thead><tr>
+            <th>Applicant</th><th>Property</th><th>Date</th><th>Breakdown</th>
+            <th style="text-align:right">Amount</th><th>Action</th>
+          </tr></thead>
+          <tbody>${advRows}${balRows}</tbody>
+          <tfoot>
+            <tr style="border-top:1px solid var(--border)">
+              <td colspan="4" style="padding:10px 14px;font-weight:500;color:var(--text2)">Subtotal — ${rep.name}</td>
+              ${repAdv>0?`<td colspan="6" style="padding:10px 14px;font-size:11px;color:var(--text3)">Advances: ${fmt$(repAdv)} &nbsp;·&nbsp; Balances: ${fmt$(repBal)}</td>`:''}
+              <td style="padding:10px 14px;font-family:var(--mono);font-weight:600;text-align:right">${fmt$(repTotal)}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('payroll-rep-breakdown').innerHTML = html;
+}
+
+async function markAdvancePaid(leaseId) {
+  const l = DB.leases.find(x=>x.id===leaseId);
+  if (!l) return;
+  const today = new Date().toISOString().slice(0,10);
+  const comm = calcComm(l);
+  await dbUpdate('Leases', leaseId, {advancePaid: comm.advance, advancePaidDate: today});
+  l.advancePaid = comm.advance; l.advancePaidDate = today;
+  renderPayroll();
+  renderCommLedger(document.getElementById('comm-rep-filter')?.value||'');
+}
+
+async function markRepAllPaid(repId, btn) {
+  const today = new Date().toISOString().slice(0,10);
+  const from = document.getElementById('pay-from').value;
+  const to   = document.getElementById('pay-to').value;
+  const inRange = d => (!from && !to) || ((!from||d>=from) && (!to||d<=to));
+
+  let leases = DB.leases.filter(l=>l.repId===repId && l.status!=='cancelled');
+  const updates = [];
+
+  leases.forEach(l => {
+    const comm = calcComm(l);
+    const changes = {};
+    // Unpaid advance
+    if ((l.status==='approved'||l.status==='moved_in') && !l.advancePaidDate && comm.advance>0 && inRange(l.dateLeased||'')) {
+      changes.advancePaid = comm.advance; changes.advancePaidDate = today;
+    }
+    // Unpaid balance
+    if (l.status==='moved_in' && !l.commBalPaidDate && comm.balance>0 && inRange(l.miDate||'')) {
+      changes.commBalPaid = comm.balance; changes.commBalPaidDate = today;
+    }
+    if (Object.keys(changes).length) updates.push({l, changes});
+  });
+
+  if (!updates.length) return;
+  if (!confirm(`Mark all ${updates.length} commission item(s) as paid for ${repName(repId)}?`)) return;
+
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  for (const {l, changes} of updates) {
+    await dbUpdate('Leases', l.id, changes);
+    Object.assign(l, changes);
+  }
+  renderPayroll();
+  renderCommLedger(document.getElementById('comm-rep-filter')?.value||'');
+}
+
+function exportPayrollCSV() {
+  const from = document.getElementById('pay-from').value;
+  const to   = document.getElementById('pay-to').value;
+  const repF = document.getElementById('pay-rep-filter').value;
+  const inRange = d => (!from && !to) || ((!from||d>=from) && (!to||d<=to));
+
+  let leases = DB.leases.filter(l=>l.status!=='cancelled');
+  if (repF) leases = leases.filter(l=>l.repId===repF);
+
+  const rows = [['Rep','Type','Applicant','Property','Date','Comm Rate','Total Comm','Advance','Balance','Amount Due']];
+  leases.forEach(l => {
+    const comm = calcComm(l);
+    const rep  = DB.reps.find(r=>r.id===l.repId);
+    const prop = DB.properties.find(p=>p.id===l.propertyId);
+    const ov   = DB.overrides.find(o=>o.repId===l.repId&&o.propertyId===l.propertyId);
+    const rate = ov ? ov.commPct : (rep?.commPct||0);
+    if ((l.status==='approved'||l.status==='moved_in') && !l.advancePaidDate && comm.advance>0 && inRange(l.dateLeased||''))
+      rows.push([rep?.name||'',  'Advance', l.applicant, prop?.name||'', l.dateLeased||'', (rate*100).toFixed(2)+'%', comm.total.toFixed(2), comm.advance.toFixed(2), comm.balance.toFixed(2), comm.advance.toFixed(2)]);
+    if (l.status==='moved_in' && !l.commBalPaidDate && comm.balance>0 && inRange(l.miDate||''))
+      rows.push([rep?.name||'', 'Balance', l.applicant, prop?.name||'', l.miDate||'', (rate*100).toFixed(2)+'%', comm.total.toFixed(2), comm.advance.toFixed(2), comm.balance.toFixed(2), comm.balance.toFixed(2)]);
+  });
+
+  const csv = rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `payroll_${from||'all'}_${to||'unpaid'}.csv`;
+  a.click();
+}
 
 function renderCommRulesView() {
   document.getElementById('comm-defaults-tbl').innerHTML=`
@@ -1398,7 +2324,212 @@ async function markCommPaid(leaseId) {
 function renderInvoices() {
   const propSel=document.getElementById('inv-prop-filter');
   propSel.innerHTML='<option value="">All properties</option>'+DB.properties.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  // Show/hide lease filters based on active tab
   filterInvoices();
+  renderRetainerInvoices();
+}
+
+function invTab(tab, el) {
+  document.querySelectorAll('#pg-invoices .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('inv-leases-view').style.display = tab==='leases' ? '' : 'none';
+  document.getElementById('inv-retainer-view').style.display = tab==='retainer' ? '' : 'none';
+  document.getElementById('inv-header-actions').style.display = tab==='leases' ? '' : 'none';
+  if (tab==='retainer') renderRetainerInvoices();
+}
+
+function renderRetainerInvoices() {
+  const entries = (DB.invLedger||[]).filter(e=>e.type==='retainer').sort((a,b)=>b.date.localeCompare(a.date));
+  const total = entries.reduce((s,e)=>s+(+e.amount||0),0);
+  document.getElementById('inv-ret-total').textContent = `Total: ${fmt$(total)}`;
+  document.getElementById('inv-ret-tbl').innerHTML = entries.length ? `
+    <table><thead><tr>
+      <th>Property</th><th>Client</th><th>Period</th><th>Date</th>
+      <th style="text-align:right">Amount</th><th>Invoice #</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody>
+    ${entries.map(e => {
+      const prop = DB.properties.find(p=>p.id===e.propertyId);
+      const isPaid = e.status === 'invoiced';
+      return `<tr>
+        <td style="font-weight:500">${prop?.name||'--'}</td>
+        <td style="color:var(--text2)">${prop?.client||'--'}</td>
+        <td style="color:var(--text2);font-size:12px">${e.periodStart||'--'} → ${e.periodEnd||'--'}</td>
+        <td style="color:var(--text2)">${e.date||'--'}</td>
+        <td style="font-family:var(--mono);text-align:right">${fmt$(e.amount)}</td>
+        <td style="font-family:var(--mono)">${currentRole==='admin'&&e.invoiceNum?`<span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);color:var(--text2)" onclick="editRetainerInvNum('${e.id}')" title="Edit">${e.invoiceNum}</span>`:e.invoiceNum||'--'}</td>
+        <td>${isPaid?'<span class="badge b-green">invoiced</span>':'<span class="badge b-amber">pending</span>'}</td>
+        <td><div class="actions">
+          ${currentRole==='admin'?`<button class="btn btn-ghost btn-xs" onclick="toggleRetainerPaid('${e.id}')">${isPaid?'Mark unpaid':'Mark invoiced'}</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteRetainerEntry('${e.id}')">Delete</button>`:'--'}
+        </div></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>
+  ` : `<div class="empty" style="padding:32px">
+    <div class="empty-icon">🗓️</div>
+    No retainer invoices yet. Click <strong>+ Generate retainer invoices</strong> to create them for a period.
+  </div>`;
+}
+
+function openGenerateRetainerModal() {
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);
+  const lastOfMonth  = new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().slice(0,10);
+  const activeProps = DB.properties.filter(p=>p.weeklyFee&&p.contractStart);
+
+  openModal(`
+    <div class="modal-title">Generate retainer invoices</div>
+    <div class="modal-sub">Creates one retainer line item per property for the selected period</div>
+    <div class="form-row" style="margin-top:16px">
+      <div class="form-group"><label class="form-label">Period start</label><input class="form-input" id="f-ret-from" type="date" value="${firstOfMonth}"></div>
+      <div class="form-group"><label class="form-label">Period end</label><input class="form-input" id="f-ret-to" type="date" value="${lastOfMonth}"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Properties to include</label>
+      <div style="max-height:220px;overflow-y:auto;border:0.5px solid var(--border);border-radius:8px;padding:8px">
+        ${activeProps.map(p => {
+          const est = calcRetainerRevenue(p, firstOfMonth, lastOfMonth);
+          return `<label style="display:flex;align-items:center;gap:10px;padding:6px 8px;cursor:pointer;border-radius:6px" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
+            <input type="checkbox" class="ret-prop-check" value="${p.id}" checked>
+            <span style="flex:1;font-size:13px">${p.name}</span>
+            <span style="font-family:var(--mono);font-size:12px;color:var(--text3)" id="ret-est-${p.id}">${fmt$(est)}</span>
+          </label>`;
+        }).join('')}
+      </div>
+      <div class="form-note">Amounts are prorated to the period overlapping each contract.</div>
+    </div>
+    <div id="ret-gen-err" style="color:var(--red);font-size:12px;display:none;margin-top:4px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="generateRetainerInvoices()">Generate</button>
+    </div>
+  `);
+
+  // Live-update estimates when dates change
+  ['f-ret-from','f-ret-to'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', () => {
+      const f = document.getElementById('f-ret-from').value;
+      const t = document.getElementById('f-ret-to').value;
+      activeProps.forEach(p => {
+        const el = document.getElementById(`ret-est-${p.id}`);
+        if (el) el.textContent = fmt$(calcRetainerRevenue(p, f, t));
+      });
+    });
+  });
+}
+
+async function generateRetainerInvoices() {
+  const from = document.getElementById('f-ret-from').value;
+  const to   = document.getElementById('f-ret-to').value;
+  if (!from || !to || from > to) {
+    document.getElementById('ret-gen-err').style.display='block';
+    document.getElementById('ret-gen-err').textContent='Please set a valid date range.';
+    return;
+  }
+  const checked = [...document.querySelectorAll('.ret-prop-check:checked')].map(cb=>cb.value);
+  if (!checked.length) {
+    document.getElementById('ret-gen-err').style.display='block';
+    document.getElementById('ret-gen-err').textContent='Select at least one property.';
+    return;
+  }
+  const today = new Date().toISOString().slice(0,10);
+  if (!DB.invLedger) DB.invLedger = [];
+  for (const propId of checked) {
+    const prop = DB.properties.find(p=>p.id===propId);
+    if (!prop) continue;
+    const amount = calcRetainerRevenue(prop, from, to);
+    if (amount <= 0) continue;
+    const entry = {
+      id: 'ret-'+Date.now()+'-'+propId,
+      leaseId: '',
+      propertyId: propId,
+      type: 'retainer',
+      amount: parseFloat(amount.toFixed(2)),
+      periodStart: from,
+      periodEnd: to,
+      date: today,
+      invoiceNum: '',
+      status: 'pending',
+      note: `Retainer ${from} to ${to}`,
+    };
+    await dbWrite('InvLedger', entry);
+    DB.invLedger.push(entry);
+  }
+  closeModal();
+  renderRetainerInvoices();
+}
+
+async function toggleRetainerPaid(entryId) {
+  const e = (DB.invLedger||[]).find(x=>x.id===entryId);
+  if (!e) return;
+  if (e.status !== 'invoiced') {
+    // Marking invoiced — prompt for invoice number
+    openModal(`
+      <div class="modal-title">Enter invoice number</div>
+      <div class="modal-sub">${DB.properties.find(p=>p.id===e.propertyId)?.name||''} — retainer</div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label">Invoice number <span style="color:var(--red)">*</span></label>
+        <input class="form-input" id="f-ret-inv-num" placeholder="e.g. 5450" style="font-family:var(--mono);font-size:15px">
+      </div>
+      <div id="ret-inv-err" style="color:var(--red);font-size:12px;display:none;margin-top:4px">Invoice number is required.</div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-green" onclick="confirmRetainerInvoiced('${entryId}')">Save invoice</button>
+      </div>
+    `);
+    setTimeout(()=>document.getElementById('f-ret-inv-num')?.focus(),50);
+  } else {
+    // Unmarking — reset
+    await dbUpdate('InvLedger', entryId, {status:'pending', invoiceNum:''});
+    Object.assign(e, {status:'pending', invoiceNum:''});
+    renderRetainerInvoices();
+  }
+}
+
+async function confirmRetainerInvoiced(entryId) {
+  const num = document.getElementById('f-ret-inv-num')?.value.trim();
+  if (!num) { document.getElementById('ret-inv-err').style.display='block'; return; }
+  const e = (DB.invLedger||[]).find(x=>x.id===entryId);
+  await dbUpdate('InvLedger', entryId, {status:'invoiced', invoiceNum: num});
+  Object.assign(e, {status:'invoiced', invoiceNum: num});
+  closeModal();
+  renderRetainerInvoices();
+}
+
+function editRetainerInvNum(entryId) {
+  const e = (DB.invLedger||[]).find(x=>x.id===entryId);
+  if (!e) return;
+  openModal(`
+    <div class="modal-title">Edit invoice number</div>
+    <div class="notice" style="margin:14px 0;background:rgba(255,180,0,0.1);border-color:rgba(255,180,0,0.3);color:#f5a623">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      You are editing an invoice number on an already-invoiced retainer.
+    </div>
+    <div class="form-group">
+      <label class="form-label">Invoice number</label>
+      <input class="form-input" id="f-ret-edit-num" value="${e.invoiceNum||''}" style="font-family:var(--mono)">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveRetainerInvNum('${entryId}')">Update</button>
+    </div>
+  `);
+}
+
+async function saveRetainerInvNum(entryId) {
+  const num = document.getElementById('f-ret-edit-num')?.value.trim();
+  const e = (DB.invLedger||[]).find(x=>x.id===entryId);
+  await dbUpdate('InvLedger', entryId, {invoiceNum: num});
+  e.invoiceNum = num;
+  closeModal();
+  renderRetainerInvoices();
+}
+
+async function deleteRetainerEntry(entryId) {
+  if (!confirm('Delete this retainer entry? This cannot be undone.')) return;
+  await dbDelete('InvLedger', entryId);
+  DB.invLedger = (DB.invLedger||[]).filter(x=>x.id!==entryId);
+  renderRetainerInvoices();
 }
 
 function filterInvoices() {
@@ -1535,6 +2666,54 @@ function renderReports() {
   document.getElementById('rpt-comm-tbl').innerHTML=commLeases.length?`<table><thead><tr><th>Applicant</th><th>Property</th>${!isRep?'<th>Rep</th>':''}<th>Advance paid</th><th>Balance paid</th><th>Total</th></tr></thead><tbody>${commLeases.map(l=>`<tr><td>${l.applicant}</td><td style="color:var(--text2)">${propName(l.propertyId)}</td>${!isRep?`<td>${repName(l.repId)}</td>`:''}<td style="font-family:var(--mono)">${fmt$(l.advancePaid||0)}</td><td style="font-family:var(--mono)">${l.commBalPaidDate?fmt$(l.commBalPaid):'<span style="color:var(--amber)">pending</span>'}</td><td style="font-family:var(--mono)">${fmt$((+(l.advancePaid||0))+(+(l.commBalPaid||0)))}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No commission activity in this period</div>';
 
   if (isRep) return;
+
+  // Property profitability
+  const profitData = calcProfitability(from, to);
+  const totalMargin = profitData.reduce((s,r)=>s+r.margin,0);
+  const totalRevPeriod = profitData.reduce((s,r)=>s+r.revenue,0);
+  document.getElementById('rpt-profit-total').textContent = `${fmt$(totalRevPeriod)} revenue · ${fmt$(totalMargin)} margin`;
+  const maxProfRev = Math.max(...profitData.map(r=>r.revenue),1);
+  document.getElementById('rpt-profit-tbl').innerHTML = profitData.length ? `
+    <table style="width:100%"><thead><tr>
+      <th>Property</th><th>Client</th><th>Leases</th>
+      <th style="text-align:right">Lease rev.</th>
+      <th style="text-align:right">Retainer rev.</th>
+      <th style="text-align:right">Total rev.</th>
+      <th style="text-align:right">Comm paid</th>
+      <th style="text-align:right">Salary alloc.</th>
+      <th style="text-align:right">Net margin</th>
+      <th style="text-align:right">Margin %</th>
+      <th style="width:80px">Bar</th>
+    </tr></thead><tbody>
+    ${profitData.map(r=>{
+      const marginColor = r.margin>=0 ? 'var(--green)' : '#e05555';
+      const barW = Math.round(r.revenue/maxProfRev*100);
+      return `<tr>
+        <td style="font-weight:500;white-space:nowrap">${r.prop.name}</td>
+        <td style="color:var(--text2)">${r.prop.client||'--'}</td>
+        <td style="font-family:var(--mono)">${r.leaseCount}</td>
+        <td style="font-family:var(--mono);text-align:right">${fmt$(r.leaseRevenue)}</td>
+        <td style="font-family:var(--mono);text-align:right;color:var(--text2)">${fmt$(r.retainerRevenue)}</td>
+        <td style="font-family:var(--mono);text-align:right;font-weight:500">${fmt$(r.revenue)}</td>
+        <td style="font-family:var(--mono);text-align:right;color:var(--text2)">${fmt$(r.commCost)}</td>
+        <td style="font-family:var(--mono);text-align:right;color:var(--text2)" title="Prorated base salary allocated by revenue share">${fmt$(r.salaryCost)}</td>
+        <td style="font-family:var(--mono);text-align:right;font-weight:500;color:${marginColor}">${r.margin>=0?'+':''}${fmt$(r.margin)}</td>
+        <td style="font-family:var(--mono);text-align:right;color:${marginColor}">${Math.round(r.roi*100)}%</td>
+        <td><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${barW}%;background:${r.margin>=0?'var(--green)':'#e05555'}"></div></div></td>
+      </tr>`;
+    }).join('')}
+    </tbody><tfoot><tr style="border-top:1px solid var(--border);font-weight:500">
+      <td colspan="3" style="padding:10px 14px">Total</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px">${fmt$(profitData.reduce((s,r)=>s+r.leaseRevenue,0))}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;color:var(--text2)">${fmt$(profitData.reduce((s,r)=>s+r.retainerRevenue,0))}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;font-weight:600">${fmt$(totalRevPeriod)}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;color:var(--text2)">${fmt$(profitData.reduce((s,r)=>s+r.commCost,0))}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;color:var(--text2)">${fmt$(profitData.reduce((s,r)=>s+r.salaryCost,0))}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;font-weight:600;color:${totalMargin>=0?'var(--green)':'#e05555'}">${totalMargin>=0?'+':''}${fmt$(totalMargin)}</td>
+      <td style="font-family:var(--mono);text-align:right;padding:10px 14px;color:${totalMargin>=0?'var(--green)':'#e05555'}">${totalRevPeriod>0?Math.round(totalMargin/totalRevPeriod*100):0}%</td>
+      <td></td>
+    </tr></tfoot></table>
+  ` : '<div class="empty">No revenue data in this period</div>';
 
   // Invoice summary
   const invLeases=leases.filter(l=>l.miDate&&inRange(l.miDate)&&l.status!=='cancelled');
@@ -2111,10 +3290,12 @@ function onGoogleSignIn(response) {
       loadFromDB().then(() => {
         updatePendingBadge();
         nav('dashboard');
+        maybeShowTutorial();
       });
     } else {
       updatePendingBadge();
       nav('dashboard');
+      maybeShowTutorial();
     }
 
   } catch(e) {
