@@ -877,6 +877,10 @@ let DB = {
 };
 // ── COMMISSION ENGINE ─────────────────────────────────────────────────────────
 function calcInvoice(lease) {
+  // If a manual override has been set, use it
+  if (lease.invoiceAmt && parseFloat(lease.invoiceAmt) > 0) {
+    return parseFloat(lease.invoiceAmt);
+  }
   const prop = DB.properties.find(p=>p.id===lease.propertyId);
   if (!prop) return 0;
   return parseFloat((lease.rent * lease.effectiveTerm * prop.invoiceRate).toFixed(2));
@@ -1877,7 +1881,7 @@ function filterLeases() {
         <td style="font-family:var(--mono)">${fmt$(l.rent)}</td>
         <td style="font-family:var(--mono)">${l.leaseTerm}mo</td>
         <td style="font-family:var(--mono)">${l.effectiveTerm}mo</td>
-        ${!isRep?`<td style="font-family:var(--mono)">${fmt$(inv)}</td>`:''}
+        ${!isRep?`<td style="font-family:var(--mono)">${fmt$(inv)}${l.invoiceAmt&&parseFloat(l.invoiceAmt)>0?'<span title="Manual override" style="margin-left:5px;font-size:9px;color:#f5a623;font-family:var(--font);font-weight:600;letter-spacing:0.04em">OVR</span>':''}</td>`:''}
         <td style="color:var(--text2);white-space:nowrap">${l.miDate||'--'}</td>
         <td>${statusSelect(l.id, l.status)}</td>
         ${!isRep?`<td>${repName(l.repId)}</td>`:''}
@@ -2014,7 +2018,7 @@ function renderCommLedger(repFilter) {
         <td style="font-weight:500">${l.applicant}</td>
         <td style="color:var(--text2)">${propName(l.propertyId)}</td>
         ${!isRep?`<td>${repName(l.repId)}</td>`:''}
-        ${!isRep?`<td style="font-family:var(--mono)">${fmt$(inv)}</td>`:''}
+        ${!isRep?`<td style="font-family:var(--mono)">${fmt$(inv)}${l.invoiceAmt&&parseFloat(l.invoiceAmt)>0?'<span title="Manual override" style="margin-left:5px;font-size:9px;color:#f5a623;font-family:var(--font);font-weight:600;letter-spacing:0.04em">OVR</span>':''}</td>`:''}
         <td style="font-family:var(--mono)">${fmt$(adv)}</td>
         <td style="color:var(--text2)">${l.advancePaidDate||'--'}</td>
         <td>${l.status==='cancelled'?'<span style="color:var(--red)">voided</span>':complete?`<span style="font-size:11px;color:rgba(255,255,255,0.35)">Paid in full${l.commBalPaidDate?' · '+l.commBalPaidDate:''}</span>`:commTooltip(l)}</td>
@@ -2858,6 +2862,27 @@ function openLeaseModal(leaseId) {
     </div>`:'<input type="hidden" id="f-split" value=""><input type="hidden" id="f-splitpct" value="0">'}
 
     <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes">${l?.notes||''}</textarea></div>
+
+    ${!isRep?`
+    <div class="divider-label">Invoice override (optional)</div>
+    <div class="form-row" style="align-items:flex-end">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Manual invoice amount</label>
+        <input class="form-input" id="f-invoice-amt" type="number" step="0.01" min="0"
+          value="${l?.invoiceAmt&&parseFloat(l.invoiceAmt)>0?l.invoiceAmt:''}"
+          placeholder="Leave blank to use calculated amount"
+          style="font-family:var(--mono)">
+        <div class="form-note" id="f-invoice-calc-note" style="color:var(--text3)">
+          Calculated: ${l?fmt$(parseFloat((l.rent||0)*(l.effectiveTerm||0)*((DB.properties.find(p=>p.id===l.propertyId)?.invoiceRate)||0))): '$0.00'}
+          &nbsp;·&nbsp; Leave blank to keep using the formula.
+        </div>
+      </div>
+      ${l?.invoiceAmt&&parseFloat(l.invoiceAmt)>0?`<div class="form-group" style="flex:0;white-space:nowrap"><button type="button" class="btn btn-ghost btn-sm" onclick="clearInvoiceOverride()" style="color:#e05555;border-color:rgba(220,60,60,0.3)">Clear override</button></div>`:''}
+    </div>
+    <div class="tut-warn" style="font-size:11px;margin:0 0 8px">
+      ⚠️ Overriding the invoice amount will replace the formula-calculated value for this lease everywhere — invoices, reports, and profitability. This cannot be auto-reversed.
+    </div>`:'<input type="hidden" id="f-invoice-amt" value="">'}
+
     <div id="f-validation-msg" style="color:var(--red);font-size:12px;margin-top:4px;display:none"></div>
     <div class="modal-footer">
       ${l&&!isRep?`<div class="modal-footer-left"><button class="btn btn-danger btn-sm" onclick="deleteLease('${l.id}')">Delete</button></div>`:''}
@@ -2911,6 +2936,22 @@ async function saveLease(leaseId) {
     marketingSource:document.getElementById('f-marketing').value,
     currentLiving:document.getElementById('f-currentliving').value,
   };
+
+  // Invoice amount override — confirm if they're setting a manual value
+  const invAmtRaw = parseFloat(document.getElementById('f-invoice-amt')?.value||'') || 0;
+  const existingL = leaseId ? DB.leases.find(x=>x.id===leaseId) : null;
+  const hadOverride = existingL && parseFloat(existingL.invoiceAmt||0) > 0;
+  if (invAmtRaw > 0 && !hadOverride) {
+    // New override being set — confirm
+    const prop = DB.properties.find(p=>p.id===data.propertyId);
+    const calc = parseFloat(((data.rent||0)*(data.effectiveTerm||0)*(prop?.invoiceRate||0)).toFixed(2));
+    const ok = confirm(
+      `Override invoice amount?\n\nCalculated: ${fmt$(calc)}\nOverride: ${fmt$(invAmtRaw)}\n\nThis will replace the formula-calculated value everywhere for this lease.`
+    );
+    if (!ok) return;
+  }
+  data.invoiceAmt = invAmtRaw > 0 ? invAmtRaw : 0;
+
   if (leaseId) {
     await dbUpdate('Leases',leaseId,data);
     Object.assign(DB.leases.find(x=>x.id===leaseId),data);
@@ -2919,11 +2960,20 @@ async function saveLease(leaseId) {
     data.invoiced=false;
     data.advancePaid=(status==='approved'||status==='moved_in')?(rep?.advanceAmt||0):0;
     data.advancePaidDate=data.advancePaid?new Date().toISOString().slice(0,10):'';
-    data.commBalPaid=0; data.commBalPaidDate=''; data.invoiceNum=''; data.invoiceAmt=0; data.clawback=false; data.cancellationReason='';
+    data.commBalPaid=0; data.commBalPaidDate=''; data.invoiceNum=''; data.clawback=false; data.cancellationReason='';
     await dbWrite('Leases',data);
     DB.leases.push(data);
   }
   closeModal(); filterLeases(); updatePendingBadge();
+}
+
+function clearInvoiceOverride() {
+  const el = document.getElementById('f-invoice-amt');
+  if (el) { el.value = ''; el.focus(); }
+  // Hide the clear button
+  const btn = el?.parentElement?.parentElement;
+  const clearDiv = btn?.querySelector('div[style*="flex:0"]');
+  if (clearDiv) clearDiv.style.display = 'none';
 }
 
 async function deleteLease(leaseId) {
